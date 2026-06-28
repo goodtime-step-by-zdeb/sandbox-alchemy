@@ -9,168 +9,170 @@
     --blau:#1f63b8;--blau-dunkel:#15407a;--nacht:#0e2238;
     --gold:#f5b212;--gold-hell:#ffd65a;--feuer:#ff7a18;--glut:#ff4d2e;
     --gruen:#3fae5a;--rot:#e1564b;--bg:#0c1a2b;--karte:#16273d;
-    --karte2:#1d3450;--text:#eaf2fb;--grau:#8ba0b8;
+    --karte2:#1d3450;--text:#eaf2fb;--grau:#8ba0b8;--rahmen:#2c4a6e;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
-  body{
-    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+  body{font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
     background:radial-gradient(circle at 50% -10%, #1c3656 0%, #0c1a2b 60%);
-    color:var(--text);line-height:1.45;overflow-x:hidden;min-height:100vh;
-  }
-  .wrap{max-width:760px;margin:0 auto;padding:0 14px 90px;position:relative;z-index:2;}
+    color:var(--text);line-height:1.45;overflow-x:hidden;min-height:100vh;}
+  .wrap{max-width:760px;margin:0 auto;padding:0 14px 120px;position:relative;z-index:2;}
 
-  /* ---------- Glut-Hintergrund ---------- */
+  /* Glut-Hintergrund */
   .embers{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-  .ember{position:absolute;bottom:-20px;width:6px;height:6px;border-radius:50%;
-    background:var(--feuer);filter:blur(1px);opacity:.6;animation:rise linear infinite;}
+  .ember{position:absolute;bottom:-20px;border-radius:50%;filter:blur(1px);opacity:.6;animation:rise linear infinite;}
   @keyframes rise{to{transform:translateY(-110vh) translateX(20px);opacity:0;}}
 
-  /* ---------- HUD ---------- */
-  .hud{position:sticky;top:0;z-index:10;
-    background:linear-gradient(135deg,var(--blau-dunkel),var(--nacht));
-    border:2px solid #2c4a6e;border-radius:0 0 20px 20px;padding:10px 14px;
+  /* HUD */
+  .hud{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,var(--blau-dunkel),var(--nacht));
+    border:2px solid var(--rahmen);border-radius:0 0 20px 20px;padding:9px 12px;
     box-shadow:0 6px 20px rgba(0,0,0,.5);margin-bottom:8px;}
-  .hud-top{display:flex;align-items:center;gap:10px;}
-  .avatar{font-size:2rem;filter:drop-shadow(0 0 6px var(--gold));line-height:1;
-    transition:transform .3s;}
+  .hud-top{display:flex;align-items:center;gap:8px;}
+  .avatar{font-size:1.9rem;filter:drop-shadow(0 0 6px var(--gold));line-height:1;transition:transform .3s;}
   .avatar.hop{animation:hop .5s;}
   @keyframes hop{0%,100%{transform:translateY(0)}30%{transform:translateY(-10px) scale(1.15)}}
   .rang-info{flex:1;min-width:0;}
-  .rang-name{font-weight:bold;font-size:1rem;color:var(--gold-hell);}
-  .rang-sub{font-size:.7rem;color:var(--grau);}
-  .taler{display:flex;align-items:center;gap:4px;font-weight:bold;color:var(--gold-hell);
-    background:rgba(245,178,18,.14);padding:5px 10px;border-radius:20px;font-size:.95rem;white-space:nowrap;}
-  .xp-leiste{margin-top:8px;height:14px;background:#0a1726;border-radius:10px;overflow:hidden;
-    border:1px solid #2c4a6e;position:relative;}
-  .xp-fuell{height:100%;width:0;border-radius:10px;
-    background:linear-gradient(90deg,var(--feuer),var(--gold));transition:width .6s ease;
-    box-shadow:0 0 10px var(--feuer);}
-  .xp-text{position:absolute;inset:0;text-align:center;font-size:.68rem;font-weight:bold;
-    color:#fff;text-shadow:0 1px 2px #000;line-height:14px;}
-  .ton-knopf{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:2px;}
+  .rang-name{font-weight:bold;font-size:.95rem;color:var(--gold-hell);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rang-sub{font-size:.68rem;color:var(--grau);}
+  .taler{display:flex;align-items:center;gap:3px;font-weight:bold;color:var(--gold-hell);
+    background:rgba(245,178,18,.14);padding:4px 9px;border-radius:20px;font-size:.9rem;white-space:nowrap;}
+  .hud-knopf{background:rgba(255,255,255,.08);border:1px solid var(--rahmen);border-radius:12px;
+    font-size:1rem;cursor:pointer;padding:5px 7px;color:var(--text);}
+  .hud-knopf.aus{opacity:.4;}
+  .xp-leiste{margin-top:7px;height:14px;background:#0a1726;border-radius:10px;overflow:hidden;border:1px solid var(--rahmen);position:relative;}
+  .xp-fuell{height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--feuer),var(--gold));
+    transition:width .6s ease;box-shadow:0 0 10px var(--feuer);}
+  .xp-text{position:absolute;inset:0;text-align:center;font-size:.66rem;font-weight:bold;color:#fff;text-shadow:0 1px 2px #000;line-height:14px;}
 
-  h1.titel{text-align:center;font-size:1.3rem;margin:10px 0 2px;color:var(--gold-hell);
-    text-shadow:0 0 12px rgba(245,178,18,.4);}
+  #ansicht{animation:seiteRein .38s ease;}
+  @keyframes seiteRein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  h1.titel{text-align:center;font-size:1.3rem;margin:8px 0 2px;color:var(--gold-hell);text-shadow:0 0 12px rgba(245,178,18,.4);}
   .titel-sub{text-align:center;font-size:.85rem;color:var(--grau);margin-bottom:6px;}
-
-  h2{font-size:1.2rem;margin:14px 2px 10px;color:var(--gold-hell);}
-  .zurueck{display:inline-flex;align-items:center;gap:6px;border:none;
-    background:var(--karte);color:var(--gold-hell);font-weight:bold;cursor:pointer;
-    padding:9px 16px;border-radius:30px;font-size:.95rem;margin:12px 0 4px;
-    box-shadow:0 2px 6px rgba(0,0,0,.4);font-family:inherit;border:1px solid #2c4a6e;}
+  h2{font-size:1.18rem;margin:14px 2px 10px;color:var(--gold-hell);}
+  .zurueck{display:inline-flex;align-items:center;gap:6px;border:none;background:var(--karte);color:var(--gold-hell);
+    font-weight:bold;cursor:pointer;padding:9px 16px;border-radius:30px;font-size:.95rem;margin:12px 0 4px;
+    box-shadow:0 2px 6px rgba(0,0,0,.4);font-family:inherit;border:1px solid var(--rahmen);}
   .zurueck:active{transform:scale(.96);}
 
-  /* ---------- Startbildschirm ---------- */
-  .held-karte{background:linear-gradient(150deg,var(--karte),#0f2138);
-    border:2px solid #2c4a6e;border-radius:22px;padding:18px;text-align:center;
-    box-shadow:0 6px 22px rgba(0,0,0,.45);margin-top:6px;position:relative;overflow:hidden;}
-  .held-karte .gross-avatar{font-size:4rem;filter:drop-shadow(0 0 14px var(--gold));}
+  /* Schmiede-Szene (Startbildschirm) */
+  .schmiede-szene{position:relative;height:120px;margin:4px 0 2px;display:flex;align-items:flex-end;justify-content:center;}
+  .amboss{font-size:3.4rem;position:relative;z-index:2;animation:ambossWippe 2.2s ease-in-out infinite;}
+  @keyframes ambossWippe{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  .hammer{position:absolute;left:50%;top:6px;font-size:2.6rem;transform-origin:80% 80%;z-index:3;animation:hammerSchlag 1.3s ease-in-out infinite;}
+  @keyframes hammerSchlag{0%{transform:translateX(-58px) rotate(-58deg)}45%{transform:translateX(-30px) rotate(8deg)}55%{transform:translateX(-30px) rotate(8deg)}100%{transform:translateX(-58px) rotate(-58deg)}}
+  .glut-klinge{position:absolute;left:calc(50% - 4px);top:54px;font-size:2rem;z-index:1;animation:klingeGluehen 1.3s ease-in-out infinite;}
+  @keyframes klingeGluehen{0%,100%{filter:drop-shadow(0 0 4px var(--feuer))}50%{filter:drop-shadow(0 0 16px var(--gold-hell)) brightness(1.3)}}
+
+  .held-karte{background:linear-gradient(150deg,var(--karte),#0f2138);border:2px solid var(--rahmen);border-radius:22px;
+    padding:14px 18px 18px;text-align:center;box-shadow:0 6px 22px rgba(0,0,0,.45);margin-top:6px;overflow:hidden;}
+  .held-karte .rang-name{font-size:1.2rem;}
   .held-karte .naechster{font-size:.82rem;color:var(--grau);margin-top:4px;}
-  .spielen-knopf{background:linear-gradient(90deg,var(--feuer),var(--gold));
-    color:#3a2200;border:none;border-radius:30px;width:100%;padding:18px;
-    font-size:1.25rem;font-weight:bold;cursor:pointer;font-family:inherit;margin-top:14px;
+  .spielen-knopf{background:linear-gradient(90deg,var(--feuer),var(--gold));color:#3a2200;border:none;border-radius:30px;
+    width:100%;padding:18px;font-size:1.22rem;font-weight:bold;cursor:pointer;font-family:inherit;margin-top:14px;
     box-shadow:0 4px 16px rgba(255,122,24,.5);animation:pulseBtn 1.8s infinite;}
   @keyframes pulseBtn{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
   .spielen-knopf:active{transform:scale(.97);}
 
-  .tages-banner{background:linear-gradient(90deg,#2a1c00,#3d2a00);border:2px solid var(--gold);
-    border-radius:18px;padding:14px;margin-top:12px;display:flex;align-items:center;gap:12px;
-    cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.4);}
-  .tages-banner.fertig{opacity:.6;border-color:#2c4a6e;}
-  .tages-banner .emo{font-size:2rem;}
+  .tages-banner{background:linear-gradient(90deg,#2a1c00,#3d2a00);border:2px solid var(--gold);border-radius:18px;
+    padding:13px;margin-top:12px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.4);}
+  .tages-banner.fertig{opacity:.6;border-color:var(--rahmen);}
+  .tages-banner .emo{font-size:1.9rem;}
   .tages-banner b{color:var(--gold-hell);}
   .tages-banner span{font-size:.8rem;color:var(--grau);display:block;}
 
   .gitter{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:12px;}
-  .kachel{background:var(--karte);border:1px solid #2c4a6e;border-radius:18px;padding:14px 10px;
-    text-align:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.35);
-    font-family:inherit;color:var(--text);transition:transform .12s;
-    display:flex;flex-direction:column;align-items:center;gap:5px;min-height:108px;justify-content:center;
-    border-top:4px solid var(--gold);}
-  .kachel:active{transform:translateY(2px) scale(.98);}
+  .kachel{background:var(--karte);border:1px solid var(--rahmen);border-radius:18px;padding:14px 10px;text-align:center;
+    cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.35);font-family:inherit;color:var(--text);transition:transform .12s;
+    display:flex;flex-direction:column;align-items:center;gap:5px;min-height:108px;justify-content:center;border-top:4px solid var(--gold);}
+  .kachel:active{transform:translateY(2px) scale(.97);}
   .kachel .emo{font-size:2rem;line-height:1;}
   .kachel .titel{font-weight:bold;font-size:.95rem;}
   .kachel .mini{font-size:.72rem;color:var(--grau);}
 
   .modus-reihe{display:flex;flex-direction:column;gap:11px;margin-top:8px;}
-  .modus-knopf{background:var(--karte);border:1px solid #2c4a6e;border-radius:16px;padding:14px;
-    display:flex;align-items:center;gap:13px;cursor:pointer;font-family:inherit;
-    box-shadow:0 4px 12px rgba(0,0,0,.35);text-align:left;color:var(--text);border-left:5px solid var(--feuer);}
+  .modus-knopf{background:var(--karte);border:1px solid var(--rahmen);border-radius:16px;padding:14px;display:flex;
+    align-items:center;gap:13px;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,.35);text-align:left;
+    color:var(--text);border-left:5px solid var(--feuer);transition:transform .12s;}
   .modus-knopf:active{transform:scale(.99);}
   .modus-knopf .emo{font-size:1.9rem;}
   .modus-knopf .txt b{font-size:1.04rem;color:var(--gold-hell);}
   .modus-knopf .txt span{font-size:.8rem;color:var(--grau);display:block;}
 
-  /* ---------- Karteikarten ---------- */
-  .karte-flip{perspective:1200px;margin:16px 0;height:330px;cursor:pointer;}
+  /* Vorlese-Knopf */
+  .lies-knopf{display:inline-flex;align-items:center;gap:6px;background:var(--blau);color:#fff;border:none;border-radius:24px;
+    padding:9px 16px;font-family:inherit;font-weight:bold;font-size:.9rem;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.4);margin:2px 0;}
+  .lies-knopf:active{transform:scale(.96);}
+  .lies-knopf.spricht{animation:liesPuls .7s infinite;background:var(--feuer);color:#3a2200;}
+  @keyframes liesPuls{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+
+  /* Karteikarten */
+  .karte-flip{perspective:1200px;margin:14px 0;height:320px;cursor:pointer;}
   .karte-innen{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d;}
   .karte-flip.gedreht .karte-innen{transform:rotateY(180deg);}
-  .karte-seite{position:absolute;width:100%;height:100%;backface-visibility:hidden;
-    border-radius:22px;padding:22px;display:flex;flex-direction:column;align-items:center;
-    justify-content:center;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.5);border:2px solid #2c4a6e;}
+  .karte-seite{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:22px;padding:22px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.5);border:2px solid var(--rahmen);}
   .karte-vorne{background:linear-gradient(150deg,var(--blau),var(--blau-dunkel));color:#fff;}
   .karte-hinten{background:linear-gradient(150deg,var(--gold-hell),var(--gold));color:#3a2a00;transform:rotateY(180deg);}
-  .karte-seite .frage{font-size:1.28rem;font-weight:bold;}
-  .karte-seite .antwort{font-size:1.1rem;}
+  .karte-seite .frage{font-size:1.26rem;font-weight:bold;}
+  .karte-seite .antwort{font-size:1.08rem;}
   .karte-seite .label{font-size:.76rem;text-transform:uppercase;letter-spacing:1px;opacity:.8;margin-bottom:10px;}
   .karte-seite .tipp{font-size:.84rem;margin-top:14px;opacity:.9;}
   .karten-nav{display:flex;justify-content:space-between;align-items:center;gap:10px;}
-  .nav-knopf{background:var(--blau);color:#fff;border:none;border-radius:30px;padding:12px 20px;
-    font-size:1rem;font-weight:bold;cursor:pointer;font-family:inherit;box-shadow:0 3px 8px rgba(0,0,0,.4);}
+  .nav-knopf{background:var(--blau);color:#fff;border:none;border-radius:30px;padding:12px 18px;font-size:1rem;
+    font-weight:bold;cursor:pointer;font-family:inherit;box-shadow:0 3px 8px rgba(0,0,0,.4);}
   .nav-knopf:disabled{background:#33455a;box-shadow:none;color:#7d8a99;}
   .nav-knopf:active:not(:disabled){transform:scale(.95);}
   .zaehler{text-align:center;font-weight:bold;color:var(--grau);}
 
-  /* ---------- Quiz ---------- */
-  .combo-anzeige{text-align:center;height:30px;margin:4px 0;}
-  .combo-anzeige .feuer-combo{display:inline-block;font-weight:bold;color:var(--feuer);
-    font-size:1.1rem;animation:comboPop .3s;}
+  /* Quiz */
+  .combo-anzeige{text-align:center;height:28px;margin:2px 0;}
+  .combo-anzeige .feuer-combo{display:inline-block;font-weight:bold;color:var(--feuer);font-size:1.1rem;animation:comboPop .3s;}
   @keyframes comboPop{0%{transform:scale(1.6)}100%{transform:scale(1)}}
-  .quiz-frage{background:var(--karte);border:1px solid #2c4a6e;border-radius:20px;padding:18px;margin:8px 0;
+  .quiz-frage{background:var(--karte);border:1px solid var(--rahmen);border-radius:20px;padding:18px;margin:6px 0;
     box-shadow:0 4px 12px rgba(0,0,0,.4);border-top:4px solid var(--feuer);}
   .quiz-frage .nr{font-size:.78rem;color:var(--grau);font-weight:bold;}
   .quiz-frage .thema{font-size:.72rem;color:var(--gold);font-weight:bold;text-transform:uppercase;}
-  .quiz-frage .text{font-size:1.15rem;font-weight:bold;margin:6px 0 4px;color:#fff;}
+  .quiz-frage .text{font-size:1.16rem;font-weight:bold;margin:6px 0 4px;color:#fff;}
   .antworten{display:flex;flex-direction:column;gap:9px;margin-top:12px;}
-  .antwort-knopf{background:#0f2138;border:2px solid #2c4a6e;border-radius:14px;padding:13px;
-    font-size:1rem;cursor:pointer;font-family:inherit;text-align:left;color:var(--text);transition:transform .1s;}
+  .antwort-knopf{background:#0f2138;border:2px solid var(--rahmen);border-radius:14px;padding:13px;font-size:1rem;
+    cursor:pointer;font-family:inherit;text-align:left;color:var(--text);transition:transform .1s;position:relative;overflow:hidden;}
   .antwort-knopf:active{transform:scale(.99);}
-  .antwort-knopf.richtig{background:#16432a;border-color:var(--gruen);font-weight:bold;color:#bdf3cd;}
+  .antwort-knopf.richtig{background:#16432a;border-color:var(--gruen);font-weight:bold;color:#bdf3cd;animation:richtigPop .4s;}
+  @keyframes richtigPop{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
   .antwort-knopf.falsch{background:#43201d;border-color:var(--rot);color:#ffc9c4;}
   .antwort-knopf:disabled{cursor:default;}
   .rueckmeldung{margin-top:12px;padding:13px;border-radius:14px;font-size:.96rem;display:none;}
-  .rueckmeldung.zeigen{display:block;}
+  .rueckmeldung.zeigen{display:block;animation:seiteRein .3s ease;}
   .rueckmeldung.gut{background:#16432a;border-left:5px solid var(--gruen);}
   .rueckmeldung.schlecht{background:#43201d;border-left:5px solid var(--rot);}
   .rueckmeldung b{color:var(--gold-hell);}
-  .weiter-knopf{background:var(--gruen);color:#fff;border:none;border-radius:30px;width:100%;padding:14px;
-    font-size:1.08rem;font-weight:bold;cursor:pointer;font-family:inherit;margin-top:12px;box-shadow:0 3px 8px rgba(63,174,90,.4);}
+  .weiter-knopf{background:var(--gruen);color:#fff;border:none;border-radius:30px;width:100%;padding:14px;font-size:1.08rem;
+    font-weight:bold;cursor:pointer;font-family:inherit;margin-top:12px;box-shadow:0 3px 8px rgba(63,174,90,.4);}
   .weiter-knopf:active{transform:scale(.98);}
 
-  /* ---------- Lückentext ---------- */
-  .luecke-satz{font-size:1.16rem;line-height:2.1;margin:14px 0;}
-  .luecke{display:inline-block;min-width:88px;border-bottom:3px dashed var(--gold);
-    text-align:center;font-weight:bold;color:var(--gold-hell);padding:0 6px;}
+  /* Lückentext */
+  .luecke-satz{font-size:1.14rem;line-height:2.1;margin:14px 0;}
+  .luecke{display:inline-block;min-width:86px;border-bottom:3px dashed var(--gold);text-align:center;font-weight:bold;color:var(--gold-hell);padding:0 6px;}
   .luecke.gefuellt{border-bottom:3px solid var(--gruen);color:var(--gruen);}
   .wort-wolke{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px;}
-  .wort-chip{background:var(--gold);color:#3a2a00;border:none;border-radius:30px;padding:11px 18px;
-    font-size:1rem;font-weight:bold;cursor:pointer;font-family:inherit;box-shadow:0 3px 6px rgba(245,178,18,.4);}
+  .wort-chip{background:var(--gold);color:#3a2a00;border:none;border-radius:30px;padding:11px 18px;font-size:1rem;font-weight:bold;
+    cursor:pointer;font-family:inherit;box-shadow:0 3px 6px rgba(245,178,18,.4);transition:transform .1s;}
   .wort-chip:active{transform:scale(.95);}
   .wort-chip.benutzt{background:#33455a;color:#7d8a99;box-shadow:none;}
 
-  /* ---------- Zuordnung ---------- */
+  /* Zuordnung */
   .zo-paar{margin-bottom:10px;}
   .zo-begriff{background:var(--blau);color:#fff;border-radius:14px 14px 0 0;padding:11px;font-weight:bold;}
-  .zo-optionen{display:flex;flex-wrap:wrap;gap:6px;background:var(--karte);border-radius:0 0 14px 14px;padding:8px;border:1px solid #2c4a6e;border-top:none;}
-  .zo-opt{border:2px solid #2c4a6e;background:#0f2138;color:var(--text);border-radius:10px;padding:8px 12px;cursor:pointer;font-family:inherit;font-size:.9rem;}
+  .zo-optionen{display:flex;flex-wrap:wrap;gap:6px;background:var(--karte);border-radius:0 0 14px 14px;padding:8px;border:1px solid var(--rahmen);border-top:none;}
+  .zo-opt{border:2px solid var(--rahmen);background:#0f2138;color:var(--text);border-radius:10px;padding:8px 12px;cursor:pointer;font-family:inherit;font-size:.9rem;}
   .zo-opt.richtig{background:#16432a;border-color:var(--gruen);font-weight:bold;color:#bdf3cd;}
   .zo-opt.falsch{background:#43201d;border-color:var(--rot);color:#ffc9c4;}
   .zo-opt:disabled{cursor:default;opacity:.5;}
 
-  /* ---------- Schmiede / Sammlung ---------- */
+  /* Schmiede / Sammlung */
   .schmiede-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
-  .klinge-karte{background:var(--karte);border:1px solid #2c4a6e;border-radius:16px;padding:14px 10px;text-align:center;
+  .klinge-karte{background:var(--karte);border:1px solid var(--rahmen);border-radius:16px;padding:14px 10px;text-align:center;
     box-shadow:0 4px 12px rgba(0,0,0,.35);position:relative;overflow:hidden;}
   .klinge-karte.besitz{border-color:var(--gold);box-shadow:0 0 16px rgba(245,178,18,.3);}
   .klinge-karte .kemo{font-size:2.6rem;filter:grayscale(1) brightness(.5);transition:filter .4s;}
@@ -178,45 +180,46 @@
   @keyframes shineBlade{0%,100%{filter:drop-shadow(0 0 2px var(--gold))}50%{filter:drop-shadow(0 0 12px var(--gold-hell))}}
   .klinge-karte .kname{font-weight:bold;font-size:.92rem;margin-top:4px;}
   .klinge-karte .kpreis{font-size:.8rem;color:var(--gold-hell);margin-top:2px;}
-  .schmied-knopf{background:linear-gradient(90deg,var(--feuer),var(--gold));color:#3a2200;border:none;
-    border-radius:20px;padding:8px 14px;font-weight:bold;cursor:pointer;font-family:inherit;margin-top:8px;font-size:.85rem;}
+  .schmied-knopf{background:linear-gradient(90deg,var(--feuer),var(--gold));color:#3a2200;border:none;border-radius:20px;
+    padding:8px 14px;font-weight:bold;cursor:pointer;font-family:inherit;margin-top:8px;font-size:.85rem;}
   .schmied-knopf:disabled{background:#33455a;color:#7d8a99;cursor:default;}
   .schmied-knopf:active:not(:disabled){transform:scale(.95);}
   .besitz-haken{position:absolute;top:6px;right:8px;color:var(--gold);font-weight:bold;}
 
-  /* ---------- Abzeichen ---------- */
+  /* Abzeichen */
   .abz-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
-  .abz{background:var(--karte);border:1px solid #2c4a6e;border-radius:14px;padding:12px;text-align:center;}
+  .abz{background:var(--karte);border:1px solid var(--rahmen);border-radius:14px;padding:12px;text-align:center;}
   .abz.auf{border-color:var(--gold);box-shadow:0 0 12px rgba(245,178,18,.25);}
   .abz .aemo{font-size:1.9rem;filter:grayscale(1) opacity(.4);}
-  .abz.auf .aemo{filter:none;}
+  .abz.auf .aemo{filter:none;animation:shineBlade 2.5s infinite;}
   .abz .aname{font-weight:bold;font-size:.85rem;margin-top:3px;}
   .abz .ainfo{font-size:.7rem;color:var(--grau);}
 
-  /* ---------- Ergebnis ---------- */
-  .ergebnis{background:var(--karte);border:1px solid #2c4a6e;border-radius:22px;padding:26px 20px;text-align:center;
-    margin-top:18px;box-shadow:0 6px 18px rgba(0,0,0,.5);}
+  /* Ergebnis + Mini-Spiel */
+  .ergebnis{background:var(--karte);border:1px solid var(--rahmen);border-radius:22px;padding:24px 20px;text-align:center;margin-top:18px;box-shadow:0 6px 18px rgba(0,0,0,.5);}
   .ergebnis .gross{font-size:3.4rem;animation:hop .6s;}
-  .ergebnis .punkte{font-size:1.35rem;font-weight:bold;color:var(--gold-hell);margin:8px 0;}
-  .ergebnis .lob{font-size:1.02rem;color:var(--gruen);font-weight:bold;}
+  .ergebnis .punkte{font-size:1.32rem;font-weight:bold;color:var(--gold-hell);margin:8px 0;}
+  .ergebnis .lob{font-size:1rem;color:var(--gruen);font-weight:bold;}
   .ergebnis .belohn{font-size:.95rem;color:var(--gold-hell);margin-top:6px;}
   .knopf-reihe{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;}
-  .mini-knopf{background:var(--blau);color:#fff;border:none;border-radius:24px;padding:10px 14px;
-    font-family:inherit;font-size:.85rem;font-weight:bold;cursor:pointer;}
+  .mini-knopf{background:var(--blau);color:#fff;border:none;border-radius:24px;padding:10px 14px;font-family:inherit;font-size:.85rem;font-weight:bold;cursor:pointer;}
   .mini-knopf:active{transform:scale(.96);}
+  .schaerf-box{margin-top:16px;padding:14px;background:#0f2138;border-radius:16px;border:1px dashed var(--gold);}
+  .schaerf-klinge{font-size:3rem;cursor:pointer;display:inline-block;animation:klingeGluehen 1.3s infinite;}
+  .schaerf-klinge:active{transform:scale(.85) rotate(-8deg);}
+  .schaerf-bar{height:12px;background:#0a1726;border-radius:8px;overflow:hidden;margin:10px auto 0;max-width:240px;border:1px solid var(--rahmen);}
+  .schaerf-fuell{height:100%;width:0;background:linear-gradient(90deg,var(--feuer),var(--gold));transition:width .2s;}
 
-  /* ---------- Wappen ---------- */
+  /* Wappen */
   .wappen-svg{display:block;margin:10px auto;width:200px;height:auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5));}
   .wappen-teil{cursor:pointer;transition:opacity .2s,transform .2s;}
   .wappen-teil:active{transform:scale(.97);}
-  .wappen-info{background:var(--karte);border:1px solid #2c4a6e;border-radius:18px;padding:16px;margin-top:12px;
-    box-shadow:0 4px 12px rgba(0,0,0,.35);border-left:5px solid var(--gold);min-height:80px;}
+  .wappen-info{background:var(--karte);border:1px solid var(--rahmen);border-radius:18px;padding:16px;margin-top:12px;box-shadow:0 4px 12px rgba(0,0,0,.35);border-left:5px solid var(--gold);min-height:80px;}
   .wappen-info b{color:var(--gold-hell);display:block;margin-bottom:4px;font-size:1.06rem;}
   .tipp-zeile{font-size:.84rem;color:var(--grau);text-align:center;margin-top:8px;}
 
-  /* ---------- Wissens-Block ---------- */
-  .info-block{background:var(--karte);border:1px solid #2c4a6e;border-radius:18px;padding:16px 18px;margin:12px 0;
-    box-shadow:0 4px 12px rgba(0,0,0,.3);border-top:4px solid var(--gold);}
+  /* Wissens-Block */
+  .info-block{background:var(--karte);border:1px solid var(--rahmen);border-radius:18px;padding:16px 18px;margin:12px 0;box-shadow:0 4px 12px rgba(0,0,0,.3);border-top:4px solid var(--gold);}
   .info-block h3{margin:0 0 8px;color:var(--gold-hell);font-size:1.08rem;}
   .info-block ul{margin:6px 0;padding-left:20px;}
   .info-block li{margin:5px 0;}
@@ -224,56 +227,68 @@
   .info-block .merk{background:#2a1c00;border-radius:10px;padding:8px 10px;font-size:.9rem;margin-top:8px;}
   .pill{display:inline-block;background:var(--gold-hell);color:#3a2a00;border-radius:20px;padding:2px 10px;font-size:.8rem;font-weight:bold;margin:2px;}
 
-  /* ---------- Effekte ---------- */
+  /* Effekte */
   .funke{position:fixed;z-index:50;pointer-events:none;font-size:1rem;will-change:transform;}
-  .floattext{position:fixed;z-index:51;pointer-events:none;font-weight:bold;font-size:1.2rem;
-    text-shadow:0 1px 4px #000;animation:floatUp 1s ease-out forwards;}
+  .floattext{position:fixed;z-index:51;pointer-events:none;font-weight:bold;font-size:1.2rem;text-shadow:0 1px 4px #000;animation:floatUp 1s ease-out forwards;}
   @keyframes floatUp{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-60px);opacity:0}}
   .shake{animation:shake .35s;}
   @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+  .flash{position:fixed;inset:0;z-index:40;pointer-events:none;opacity:0;}
+  .flash.gut{background:radial-gradient(circle,rgba(63,174,90,.35),transparent 70%);animation:flashAn .5s;}
+  .flash.schlecht{background:radial-gradient(circle,rgba(225,86,75,.35),transparent 70%);animation:flashAn .5s;}
+  @keyframes flashAn{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+  .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.4);transform:scale(0);animation:rip .5s ease-out;pointer-events:none;}
+  @keyframes rip{to{transform:scale(3);opacity:0}}
+
+  /* Maskottchen Klingo */
+  .klingo{position:fixed;left:10px;bottom:10px;z-index:30;display:flex;align-items:flex-end;gap:8px;max-width:calc(100% - 20px);}
+  .klingo-fig{font-size:2.6rem;filter:drop-shadow(0 0 8px rgba(245,178,18,.5));cursor:pointer;flex-shrink:0;}
+  .klingo-fig.redet{animation:klingoWippe .4s infinite;}
+  @keyframes klingoWippe{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-5px) rotate(3deg)}}
+  .klingo-bubble{background:#fff;color:#1d2b3a;border-radius:16px 16px 16px 4px;padding:9px 13px;font-size:.88rem;font-weight:bold;
+    box-shadow:0 4px 14px rgba(0,0,0,.5);max-width:230px;display:none;line-height:1.3;}
+  .klingo-bubble.zeigen{display:block;animation:bubbleRein .3s ease;}
+  @keyframes bubbleRein{from{opacity:0;transform:scale(.7) translateY(10px)}to{opacity:1;transform:none}}
 
   /* Level-Up Overlay */
-  .overlay{position:fixed;inset:0;z-index:200;background:rgba(6,14,24,.92);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
+  .overlay{position:fixed;inset:0;z-index:200;background:rgba(6,14,24,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;}
   .overlay .strahl{font-size:5rem;animation:levelGlow 1.2s infinite;}
   @keyframes levelGlow{0%,100%{transform:scale(1);filter:drop-shadow(0 0 16px var(--gold))}50%{transform:scale(1.15);filter:drop-shadow(0 0 30px var(--gold-hell))}}
-  .overlay h2{font-size:1.8rem;color:var(--gold-hell);margin:14px 0 4px;}
+  .overlay h2{font-size:1.7rem;color:var(--gold-hell);margin:14px 0 4px;}
   .overlay p{color:var(--text);font-size:1.05rem;margin:2px 0;}
-  .overlay .neu-rang{font-size:1.5rem;font-weight:bold;color:#fff;margin-top:8px;}
-  .overlay button{margin-top:22px;background:linear-gradient(90deg,var(--feuer),var(--gold));color:#3a2200;
-    border:none;border-radius:30px;padding:14px 28px;font-size:1.15rem;font-weight:bold;cursor:pointer;font-family:inherit;}
+  .overlay .neu-rang{font-size:1.4rem;font-weight:bold;color:#fff;margin-top:8px;}
+  .overlay button{margin-top:22px;background:linear-gradient(90deg,var(--feuer),var(--gold));color:#3a2200;border:none;border-radius:30px;padding:14px 28px;font-size:1.12rem;font-weight:bold;cursor:pointer;font-family:inherit;}
 
   .fuss{text-align:center;font-size:.76rem;color:var(--grau);margin-top:22px;}
-  .verstecken{display:none;}
 </style>
 </head>
 <body>
 <div class="embers" id="embers"></div>
 
 <div class="wrap">
-  <!-- HUD -->
   <div class="hud">
     <div class="hud-top">
       <span class="avatar" id="hud-avatar">🧒</span>
-      <div class="rang-info">
-        <div class="rang-name" id="hud-rang">Lehrling</div>
-        <div class="rang-sub" id="hud-sub">Level 1</div>
-      </div>
-      <button class="ton-knopf" id="ton-knopf" onclick="tonUmschalten()" title="Ton an/aus">🔊</button>
+      <div class="rang-info"><div class="rang-name" id="hud-rang">Lehrling</div><div class="rang-sub" id="hud-sub">Level 1</div></div>
+      <button class="hud-knopf" id="lies-toggle" onclick="vorlesenUmschalten()" title="Vorlesen an/aus">🗣️</button>
+      <button class="hud-knopf" id="ton-knopf" onclick="tonUmschalten()" title="Ton an/aus">🔊</button>
       <span class="taler">🪙 <span id="hud-taler">0</span></span>
     </div>
     <div class="xp-leiste"><div class="xp-fuell" id="xp-fuell"></div><div class="xp-text" id="xp-text"></div></div>
   </div>
 
   <div id="ansicht"></div>
+  <div class="fuss">Solinger Klingenschmiede · Klasse 3 · Schmiede dein Wissen! 🔥</div>
+</div>
 
-  <div class="fuss">Solinger Klingenschmiede · Sachunterricht Klasse 3 · Schmiede dein Wissen! 🔥</div>
+<!-- Maskottchen -->
+<div class="klingo">
+  <div class="klingo-bubble" id="klingo-bubble"></div>
+  <div class="klingo-fig" id="klingo-fig" onclick="klingoWiederholen()" title="Klingo nochmal hören">🧔‍♂️</div>
 </div>
 
 <script>
-/* =========================================================
-   LERNINHALTE (aus dem Solingen-Heft + ergänzte Prüfungsfragen)
-   ========================================================= */
+/* ===================== LERNINHALTE ===================== */
 const THEMEN=[
   {id:"geschichte",emo:"🏰",titel:"Geschichte",mini:"Wie Solingen entstand"},
   {id:"wappen",emo:"🛡️",titel:"Das Wappen",mini:"Anker & Schwerter"},
@@ -285,61 +300,61 @@ const THEMEN=[
 const KARTEN={
   geschichte:[
     {f:"Wie hieß die Gegend von Solingen bei den ersten Siedlern?",a:"„Solonchon“",t:"Daraus wurde später Solingen."},
-    {f:"Wie veränderte sich der Name?",a:"Solonchon → Solagon → Solonchon → Solungen → Solingen",t:"Über viele Jahre."},
+    {f:"Wie veränderte sich der Name?",a:"Solonchon, Solagon, Solonchon, Solungen, Solingen",t:"Über viele Jahre."},
     {f:"Wann wurde Solingen zum ersten Mal erwähnt?",a:"Ungefähr im Jahr 1000",t:"Über 1000 Jahre her!"},
-    {f:"An welchem Tag bekam Solingen die Stadtrechte?",a:"Am 23. Februar 1374",t:"Merke: 1374 = Stadt."},
-    {f:"Wie alt wurde Solingen im Jahr 1974?",a:"600 Jahre alt",t:"1374 + 600 = 1974."},
-    {f:"Wer verlieh Solingen die Stadtrechte?",a:"Der Graf und die Gräfin von Berg",t:"Darum: „Bergisches Land“."},
-    {f:"Was durften die Bürger ab 1374? (1)",a:"Einen Bürgermeister wählen",t:""},
-    {f:"Was durften die Bürger ab 1374? (2)",a:"Die Stadt mit Mauern und Toren befestigen",t:""},
-    {f:"Was durften die Bürger ab 1374? (3)",a:"Selbst Gericht abhalten",t:""},
-    {f:"Was durften die Bürger ab 1374? (4)",a:"Einen Wochenmarkt und Jahrmarkt abhalten",t:""},
+    {f:"An welchem Tag bekam Solingen die Stadtrechte?",a:"Am 23. Februar 1374",t:"Merke: 1374 ist Stadt."},
+    {f:"Wie alt wurde Solingen im Jahr 1974?",a:"600 Jahre alt",t:"1374 plus 600 ist 1974."},
+    {f:"Wer verlieh Solingen die Stadtrechte?",a:"Der Graf und die Gräfin von Berg",t:"Darum: Bergisches Land."},
+    {f:"Was durften die Bürger ab 1374? Erstens:",a:"Einen Bürgermeister wählen",t:""},
+    {f:"Was durften die Bürger ab 1374? Zweitens:",a:"Die Stadt mit Mauern und Toren befestigen",t:""},
+    {f:"Was durften die Bürger ab 1374? Drittens:",a:"Selbst Gericht abhalten",t:""},
+    {f:"Was durften die Bürger ab 1374? Viertens:",a:"Einen Wochenmarkt und Jahrmarkt abhalten",t:""},
   ],
   wappen:[
-    {f:"Was zeigt das Solinger Wappen?",a:"Goldener Anker + zwei gekreuzte Schwerter auf blauem Grund",t:""},
-    {f:"Wofür stehen die zwei Schwerter?",a:"Für die Solinger Industrie – das Schmieden von Klingen",t:""},
+    {f:"Was zeigt das Solinger Wappen?",a:"Einen goldenen Anker und zwei gekreuzte Schwerter auf blauem Grund",t:""},
+    {f:"Wofür stehen die zwei Schwerter?",a:"Für die Solinger Industrie, das Schmieden von Klingen",t:""},
     {f:"Woran soll der Anker erinnern?",a:"An den Schutzheiligen Sankt Clemens",t:"Heiliger der alten Pfarrkirche."},
-    {f:"Was passierte dem heiligen Clemens?",a:"An einen Anker gekettet und ins Meer geworfen",t:"Um 100 n. Chr."},
-    {f:"Was bedeutet die Mauerkrone mit 5 Türmen?",a:"Großstadt mit über 100.000 Einwohnern",t:"5 Türme = Großstadt."},
+    {f:"Was passierte dem heiligen Clemens?",a:"Er wurde an einen Anker gekettet und ins Meer geworfen",t:"Um 100 nach Christus."},
+    {f:"Was bedeutet die Mauerkrone mit 5 Türmen?",a:"Großstadt mit über 100.000 Einwohnern",t:"Fünf Türme heißt Großstadt."},
     {f:"Was glauben viele über die 5 Türme?",a:"Dass sie für die fünf Städte stehen",t:""},
     {f:"Aus welchem Jahr ist das älteste Stadtsiegel?",a:"Aus dem Jahr 1468",t:"Mit dem heiligen Clemens."},
-    {f:"Wann schlossen sich die fünf Städte zusammen?",a:"Im Jahr 1929",t:"Aus 5 mach 1."},
+    {f:"Wann schlossen sich die fünf Städte zusammen?",a:"Im Jahr 1929",t:"Aus fünf mach eins."},
   ],
   staedte:[
-    {f:"Welche fünf Städte wurden 1929 zu Solingen?",a:"Gräfrath, Höhscheid, Ohligs, Solingen, Wald",t:"Merke: G-H-O-S-W."},
+    {f:"Welche fünf Städte wurden 1929 zu Solingen?",a:"Gräfrath, Höhscheid, Ohligs, Solingen und Wald",t:"Merke: G H O S W."},
     {f:"Seit wann gehört Burg zu Solingen?",a:"Erst seit 1975",t:""},
-    {f:"Was zeigen die 3 Türme im Ohligs-Wappen?",a:"Dass Ohligs eine Kleinstadt ist",t:"3=Klein, 5=Groß."},
-    {f:"Wofür stehen die Silbersterne (Ohligs)?",a:"Für die vielen Hofschaften",t:""},
-    {f:"Wofür steht das Flügelrad (Ohligs)?",a:"Für den Eisenbahnanschluss / den Bahnhof",t:"Ohligs: 1891 gegründet."},
+    {f:"Was zeigen die 3 Türme im Ohligs-Wappen?",a:"Dass Ohligs eine Kleinstadt ist",t:"Drei klein, fünf groß."},
+    {f:"Wofür stehen die Silbersterne bei Ohligs?",a:"Für die vielen Hofschaften",t:""},
+    {f:"Wofür steht das Flügelrad bei Ohligs?",a:"Für den Eisenbahnanschluss, den Bahnhof",t:"Ohligs gegründet 1891."},
     {f:"Wie viele Stadtbezirke hat Solingen heute?",a:"Fünf Stadtbezirke",t:""},
   ],
   berufe:[
-    {f:"Was machte der Schmied?",a:"Erhitzte Eisen und gab ihm mit Hammer und Amboss die Form",t:""},
-    {f:"Was machte der Härter?",a:"Tauchte glühendes Eisen in Wasser/Öl – so wurde es hart",t:""},
-    {f:"Was machte der Schleifer (und wo)?",a:"Schliff scharf im Kotten – mit bis zu 100 Personen",t:""},
-    {f:"Was machte der Schwertfeger?",a:"Setzte Messer/Schere/Schwert zusammen und polierte",t:""},
-    {f:"Was machten die Verleger?",a:"Büro in der Stadt: lieferten Rohware, verkauften Fertiges",t:""},
-    {f:"Was machten die Lieferfrauen?",a:"Brachten Werkstücke von Ort zu Ort",t:""},
-    {f:"Wie ist die Reihenfolge?",a:"Schmied → Härter → Schleifer → Schwertfeger",t:""},
-    {f:"Was bedeutet „ME FECIT SOLINGEN“?",a:"„Mich schuf Solingen“ – das Meisterzeichen",t:""},
-    {f:"Welchen Spitznamen hat Solingen?",a:"Die „Klingenstadt“",t:"Mit Klingenstraße & Klingenpfad."},
-    {f:"Was wird heute vor allem hergestellt?",a:"Vor allem Messer (und Scheren)",t:""},
-    {f:"Wer machte die Holzkohle?",a:"Der Köhler – aus Eichen-/Buchenholz",t:"Kohle zum Eisen-Schmelzen."},
+    {f:"Was machte der Schmied?",a:"Er erhitzte Eisen und gab ihm mit Hammer und Amboss die Form",t:""},
+    {f:"Was machte der Härter?",a:"Er tauchte glühendes Eisen in Wasser oder Öl, so wurde es hart",t:""},
+    {f:"Was machte der Schleifer und wo?",a:"Er schliff Klingen scharf im Kotten, mit bis zu 100 Personen",t:""},
+    {f:"Was machte der Schwertfeger?",a:"Er setzte Messer, Schere oder Schwert zusammen und polierte",t:""},
+    {f:"Was machten die Verleger?",a:"Sie hatten Büros, lieferten Rohware und verkauften Fertiges",t:""},
+    {f:"Was machten die Lieferfrauen?",a:"Sie brachten Werkstücke von Ort zu Ort",t:""},
+    {f:"Wie ist die Reihenfolge?",a:"Schmied, Härter, Schleifer, Schwertfeger",t:""},
+    {f:"Was bedeutet ME FECIT SOLINGEN?",a:"Mich schuf Solingen, das Meisterzeichen",t:""},
+    {f:"Welchen Spitznamen hat Solingen?",a:"Die Klingenstadt",t:"Mit Klingenstraße und Klingenpfad."},
+    {f:"Was wird heute vor allem hergestellt?",a:"Vor allem Messer und Scheren",t:""},
+    {f:"Wer machte die Holzkohle?",a:"Der Köhler, aus Eichen- und Buchenholz",t:"Kohle zum Eisen schmelzen."},
   ],
   wasser:[
     {f:"Welche zwei Flüsse waren wichtig?",a:"Die Wupper und der Morsbach",t:""},
     {f:"Was geschah in den Hämmern?",a:"Wasserräder bewegten Hämmer, die Eisen schmiedeten",t:""},
     {f:"Was geschah in den Schleifkotten?",a:"Klingen wurden mit Wasserkraft geschliffen",t:""},
-    {f:"Woher kam die Kraft früher?",a:"Aus der Wasserkraft der Bäche (Wasserräder)",t:""},
+    {f:"Woher kam die Kraft früher?",a:"Aus der Wasserkraft der Bäche, durch Wasserräder",t:""},
     {f:"Wovon erzählt die Sage über die Wupper?",a:"Ein Erdmännlein schenkte einer armen Frau einen Bach",t:"Daraus wurde die Wupper."},
-    {f:"Woher kam das Eisenerz vor 700 Jahren?",a:"Aus dem Bergischen Land; später aus dem Siegerland",t:"Geschmolzen in Rennöfen."},
+    {f:"Woher kam das Eisenerz vor 700 Jahren?",a:"Aus dem Bergischen Land, später aus dem Siegerland",t:"Geschmolzen in Rennöfen."},
   ],
   haeuser:[
     {f:"Wie heißt die älteste Hausart?",a:"Das Fachwerkhaus",t:""},
     {f:"Woraus war das Fundament?",a:"Aus schweren Bruchsteinen",t:""},
     {f:"Womit wurden die Gefache gefüllt?",a:"Mit Weiden geflochten und mit Lehm verputzt",t:""},
-    {f:"Womit wurden die Balken geschützt?",a:"Mit Teer bestrichen (darum schwarz)",t:""},
-    {f:"Warum war Feuer so gefährlich?",a:"Die Häuser standen dicht – alles brannte schnell",t:""},
+    {f:"Womit wurden die Balken geschützt?",a:"Mit Teer bestrichen, darum schwarz",t:""},
+    {f:"Warum war Feuer so gefährlich?",a:"Die Häuser standen dicht, alles brannte schnell",t:""},
     {f:"Warum bekam die Stadt eine Mauer?",a:"Zum Schutz vor Feinden",t:""},
     {f:"Nenne Solinger Stadttore.",a:"Ohliger Tor, Neutor, Amtstor, Breidbacher Tor, Bachtor",t:""},
   ],
@@ -353,20 +368,20 @@ const QUIZ=[
   {thema:"Wappen",f:"Was zeigt das Solinger Wappen?",o:["Anker und zwei Schwerter","Ein Pferd","Drei Sterne","Nur eine Krone"],r:0},
   {thema:"Wappen",f:"Wofür stehen die Schwerter?",o:["Für das Meer","Für die Klingen-Industrie","Für den Wald","Für die Bauern"],r:1},
   {thema:"Wappen",f:"Woran erinnert der Anker?",o:["An einen Hafen","An ein Schiff","An den heiligen Clemens","An die Wupper"],r:2},
-  {thema:"Wappen",f:"Was bedeutet die Mauerkrone (5 Türme)?",o:["5 Kirchen","Großstadt über 100.000","5 Flüsse","5 Burgen"],r:1},
+  {thema:"Wappen",f:"Was bedeutet die Mauerkrone mit 5 Türmen?",o:["5 Kirchen","Großstadt über 100.000","5 Flüsse","5 Burgen"],r:1},
   {thema:"Wappen",f:"Welche Farbe hat der Grund des Wappens?",o:["Rot","Grün","Blau","Schwarz"],r:2},
   {thema:"Wappen",f:"Aus welchem Jahr ist das älteste Stadtsiegel?",o:["1374","1468","1929","1795"],r:1},
   {thema:"Die 5 Städte",f:"Welche Stadt gehört NICHT zu den fünf von 1929?",o:["Gräfrath","Höhscheid","Burg","Wald"],r:2},
   {thema:"Die 5 Städte",f:"Wann schlossen sich die fünf Städte zusammen?",o:["1374","1891","1929","1975"],r:2},
   {thema:"Die 5 Städte",f:"Seit wann gehört Burg zu Solingen?",o:["1929","1950","1975","2000"],r:2},
-  {thema:"Die 5 Städte",f:"Wofür steht das Flügelrad (Ohligs)?",o:["Bahnhof / Eisenbahn","Eine Mühle","Den Wind","Ein Schiff"],r:0},
-  {thema:"Die 5 Städte",f:"Was zeigen die 3 Türme (Ohligs)?",o:["Großstadt","Kleinstadt","Dorf","Hauptstadt"],r:1},
+  {thema:"Die 5 Städte",f:"Wofür steht das Flügelrad bei Ohligs?",o:["Bahnhof / Eisenbahn","Eine Mühle","Den Wind","Ein Schiff"],r:0},
+  {thema:"Die 5 Städte",f:"Was zeigen die 3 Türme bei Ohligs?",o:["Großstadt","Kleinstadt","Dorf","Hauptstadt"],r:1},
   {thema:"Berufe",f:"Wer formt Eisen mit Hammer und Amboss?",o:["Der Schleifer","Der Schmied","Der Verleger","Der Härter"],r:1},
   {thema:"Berufe",f:"Wer macht die Klinge mit dem Schleifstein scharf?",o:["Der Schleifer","Der Schmied","Die Lieferfrau","Der Verleger"],r:0},
   {thema:"Berufe",f:"Wer taucht Eisen in Wasser oder Öl?",o:["Der Schwertfeger","Der Härter","Der Bauer","Der Köhler"],r:1},
   {thema:"Berufe",f:"Wer setzt Messer und Schere zusammen?",o:["Der Schmied","Der Schleifer","Der Schwertfeger","Der Härter"],r:2},
-  {thema:"Berufe",f:"Was bedeutet „ME FECIT SOLINGEN“?",o:["Solingen ist groß","Mich schuf Solingen","Aus Solingen","Solingen für immer"],r:1},
-  {thema:"Berufe",f:"Welche Reihenfolge ist richtig?",o:["Schleifer → Schmied → Härter","Schmied → Härter → Schleifer → Schwertfeger","Härter → Schmied → Schleifer","Schwertfeger → Schmied"],r:1},
+  {thema:"Berufe",f:"Was bedeutet ME FECIT SOLINGEN?",o:["Solingen ist groß","Mich schuf Solingen","Aus Solingen","Solingen für immer"],r:1},
+  {thema:"Berufe",f:"Welche Reihenfolge ist richtig?",o:["Schleifer, Schmied, Härter","Schmied, Härter, Schleifer, Schwertfeger","Härter, Schmied, Schleifer","Schwertfeger, Schmied"],r:1},
   {thema:"Berufe",f:"Welchen Spitznamen hat Solingen?",o:["Wasserstadt","Klingenstadt","Burgstadt","Goldstadt"],r:1},
   {thema:"Berufe",f:"Wer stellte die Holzkohle her?",o:["Der Köhler","Der Schmied","Der Bauer","Der Verleger"],r:0},
   {thema:"Wasser",f:"Welcher Fluss trieb die Wasserräder an?",o:["Der Rhein","Die Wupper","Die Donau","Die Elbe"],r:1},
@@ -386,7 +401,7 @@ const LUECKEN=[
   {teile:["Im Jahr ","1929"," wurden fünf Städte zu Solingen ","VEREINIGT","."],woerter:["1929","VEREINIGT","1975","GETRENNT"]},
   {teile:["Der ","SCHMIED"," gab dem Eisen mit Hammer und ","AMBOSS"," die Form."],woerter:["SCHMIED","AMBOSS","KOTTEN","MEER"]},
   {teile:["Der ","SCHLEIFER"," gab der Klinge mit dem ","SCHLEIFSTEIN"," Glanz und Schärfe."],woerter:["SCHLEIFER","SCHLEIFSTEIN","ANKER","BÜRO"]},
-  {teile:["„ME FECIT SOLINGEN“ heißt: Mich ","SCHUF"," Solingen. Solingen = die ","KLINGENSTADT","."],woerter:["SCHUF","KLINGENSTADT","MEER","BURG"]},
+  {teile:["ME FECIT SOLINGEN heißt: Mich ","SCHUF"," Solingen. Solingen ist die ","KLINGENSTADT","."],woerter:["SCHUF","KLINGENSTADT","MEER","BURG"]},
   {teile:["Die ","WUPPER"," trieb mit ","WASSERKRAFT"," die Räder an."],woerter:["WUPPER","WASSERKRAFT","NORDSEE","WIND"]},
   {teile:["Die älteste Hausart ist das ","FACHWERKHAUS",". Die Balken wurden mit ","TEER"," bestrichen."],woerter:["FACHWERKHAUS","TEER","HOCHHAUS","GOLD"]},
   {teile:["Der Stadtteil ","BURG"," gehört erst seit ","1975"," zu Solingen."],woerter:["BURG","1975","OHLIGS","1374"]},
@@ -414,72 +429,63 @@ const ZUORDNUNGEN=[
 const WISSEN={
   geschichte:`<div class="info-block"><h3>📜 Wie Solingen entstand</h3><ul>
     <li>Früher war hier dichter <b>Wald</b>. Die ersten Siedler mussten ihn roden.</li>
-    <li>Die Gegend hieß <b>„Solonchon“</b> → Solagon → Solonchon → Solungen → <b>Solingen</b>.</li>
+    <li>Die Gegend hieß <b>Solonchon</b>. Daraus wurde nach und nach Solingen.</li>
     <li>Um das Jahr <b>1000</b> zum ersten Mal erwähnt.</li>
-    <li>Am <b>23. Februar 1374</b> bekam Solingen vom <b>Grafen und der Gräfin von Berg</b> die <b>Stadtrechte</b>.</li>
-    <li>1974: <b>600. Geburtstag</b>.</li></ul>
-    <div class="merk">⭐ Die Bürger durften: Bürgermeister <b>wählen</b>, Stadt mit <b>Mauern und Toren</b> befestigen, <b>Gericht</b> halten, <b>Wochenmarkt & Jahrmarkt</b> abhalten.</div></div>`,
+    <li>Am <b>23. Februar 1374</b> bekam Solingen vom Grafen und der Gräfin von Berg die <b>Stadtrechte</b>.</li>
+    <li>1974 feierte Solingen den <b>600. Geburtstag</b>.</li></ul>
+    <div class="merk">⭐ Die Bürger durften: Bürgermeister wählen, die Stadt mit Mauern und Toren befestigen, selbst Gericht halten, Wochenmarkt und Jahrmarkt abhalten.</div></div>`,
   wappen:`<div class="info-block"><h3>🛡️ Das Solinger Wappen</h3><ul>
-    <li>Auf <b>blauem Grund</b>: goldener <b>Anker</b> + zwei gekreuzte <b>Schwerter</b>.</li>
-    <li><b>Schwerter</b> = Solinger <b>Industrie</b> (Klingen schmieden).</li>
-    <li><b>Anker</b> = Schutzheiliger <b>Sankt Clemens</b> (an Anker gekettet, ins Meer geworfen, um 100 n. Chr.).</li>
-    <li><b>Mauerkrone, 5 Türme</b> = <b>Großstadt</b> über <b>100.000</b> Einwohner.</li>
-    <li>Viele glauben: 5 Türme = die <b>fünf Städte</b>.</li></ul>
-    <div class="merk">⭐ Ältestes Stadtsiegel = <b>1468</b>. Fünf Städte vereint = <b>1929</b>.</div></div>`,
+    <li>Auf blauem Grund: ein goldener <b>Anker</b> und zwei gekreuzte <b>Schwerter</b>.</li>
+    <li>Die Schwerter stehen für die Solinger <b>Industrie</b>, das Schmieden von Klingen.</li>
+    <li>Der Anker erinnert an den heiligen <b>Sankt Clemens</b>. Er wurde an einen Anker gekettet und ins Meer geworfen.</li>
+    <li>Die Mauerkrone mit <b>fünf Türmen</b> bedeutet: Großstadt über 100.000 Einwohner.</li>
+    <li>Viele glauben: die fünf Türme stehen für die fünf Städte.</li></ul>
+    <div class="merk">⭐ Ältestes Stadtsiegel: 1468. Fünf Städte vereint: 1929.</div></div>`,
   staedte:`<div class="info-block"><h3>🗺️ Die fünf Städte (1929)</h3>
     <p><span class="pill">G</span><span class="pill">H</span><span class="pill">O</span><span class="pill">S</span><span class="pill">W</span></p>
-    <ul><li><b>G</b>räfrath</li><li><b>H</b>öhscheid</li><li><b>O</b>hligs</li><li><b>S</b>olingen</li><li><b>W</b>ald</li></ul>
-    <div class="merk">🏘️ <b>Burg</b> kam erst <b>1975</b> dazu.</div></div>
+    <ul><li>Gräfrath</li><li>Höhscheid</li><li>Ohligs</li><li>Solingen</li><li>Wald</li></ul>
+    <div class="merk">🏘️ Der Stadtteil Burg kam erst 1975 dazu.</div></div>
     <div class="info-block"><h3>🚂 Ohligs und sein Wappen</h3><ul>
-    <li>Ohligs gegründet <b>1891</b>.</li><li><b>3 Türme</b> = <b>Kleinstadt</b>.</li>
-    <li><b>Silbersterne</b> = die <b>Hofschaften</b>.</li><li><b>Flügelrad</b> = der <b>Bahnhof</b>.</li></ul></div>`,
+    <li>Ohligs wurde 1891 gegründet.</li><li>Drei Türme bedeuten: Kleinstadt.</li>
+    <li>Die Silbersterne stehen für die Hofschaften.</li><li>Das Flügelrad steht für den Bahnhof.</li></ul></div>`,
   berufe:`<div class="info-block"><h3>🔨 Die Berufe der Klingen-Herstellung</h3>
-    <p>Reihenfolge: <b>Schmied → Härter → Schleifer → Schwertfeger</b></p><ul>
-    <li><b>Schmied:</b> erhitzt Eisen, formt mit Hammer & Amboss.</li>
-    <li><b>Härter:</b> taucht glühendes Eisen in Wasser/Öl → hart.</li>
-    <li><b>Schleifer:</b> macht scharf im <b>Kotten</b>.</li>
-    <li><b>Schwertfeger:</b> setzt zusammen & poliert.</li>
-    <li><b>Verleger:</b> Büro – liefert & verkauft.</li>
+    <p>Reihenfolge: Schmied, Härter, Schleifer, Schwertfeger.</p><ul>
+    <li><b>Schmied:</b> erhitzt Eisen, formt mit Hammer und Amboss.</li>
+    <li><b>Härter:</b> taucht glühendes Eisen in Wasser oder Öl.</li>
+    <li><b>Schleifer:</b> macht die Klinge scharf, im Kotten.</li>
+    <li><b>Schwertfeger:</b> setzt zusammen und poliert.</li>
+    <li><b>Verleger:</b> hat ein Büro, liefert und verkauft.</li>
     <li><b>Lieferfrauen:</b> bringen Ware von Ort zu Ort.</li>
     <li><b>Köhler:</b> macht Holzkohle.</li></ul>
-    <div class="merk">⚔️ <b>ME FECIT SOLINGEN</b> = „Mich schuf Solingen“. Solingen = <b>Klingenstadt</b>, heute v.a. <b>Messer</b>.</div></div>`,
+    <div class="merk">⚔️ ME FECIT SOLINGEN heißt: Mich schuf Solingen. Solingen ist die Klingenstadt, heute vor allem Messer.</div></div>`,
   wasser:`<div class="info-block"><h3>💧 Bäche, Kotten und Hämmer</h3><ul>
-    <li><b>Wupper</b> und <b>Morsbach</b> trieben mit <b>Wasserkraft</b> die Räder an.</li>
-    <li><b>Hämmer:</b> Wasserräder bewegten Hämmer, die Eisen schmiedeten.</li>
-    <li><b>Schleifkotten:</b> Klingen schleifen.</li>
-    <li>Vor 700 Jahren <b>Eisenerz</b> im Bergischen Land, in <b>Rennöfen</b> geschmolzen; später aus dem <b>Siegerland</b>.</li></ul>
-    <div class="merk">🧙 Sage: Ein <b>Erdmännlein</b> schenkte einer armen Frau einen Bach → die <b>Wupper</b>.</div></div>`,
+    <li>Die Wupper und der Morsbach trieben mit Wasserkraft die Räder an.</li>
+    <li>In den Hämmern bewegten Wasserräder große Hämmer, die Eisen schmiedeten.</li>
+    <li>In den Schleifkotten wurden Klingen geschliffen.</li>
+    <li>Vor 700 Jahren gab es Eisenerz im Bergischen Land, geschmolzen in Rennöfen. Später kam es aus dem Siegerland.</li></ul>
+    <div class="merk">🧙 Sage: Ein Erdmännlein schenkte einer armen Frau einen Bach. Daraus wurde die Wupper.</div></div>`,
   haeuser:`<div class="info-block"><h3>🏚️ Fachwerkhäuser</h3><ul>
-    <li>Älteste Hausart = <b>Fachwerkhaus</b>.</li><li>Fundament aus <b>Bruchsteinen</b>.</li>
-    <li>Gefache mit <b>Weiden</b> geflochten, mit <b>Lehm</b> verputzt.</li>
-    <li><b>Eichenbalken</b> mit <b>Teer</b> bestrichen.</li></ul></div>
+    <li>Die älteste Hausart ist das Fachwerkhaus.</li><li>Das Fundament war aus Bruchsteinen.</li>
+    <li>Die Gefache wurden mit Weiden geflochten und mit Lehm verputzt.</li>
+    <li>Die Eichenbalken wurden mit Teer bestrichen.</li></ul></div>
     <div class="info-block"><h3>🔥 Feinde und Feuer</h3><ul>
-    <li><b>Stadtmauer</b> zum Schutz vor Feinden.</li>
-    <li>Tore: <b>Ohliger Tor, Neutor, Amtstor, Breidbacher Tor, Bachtor</b>.</li>
-    <li>Häuser standen <b>dicht</b> → Feuer war sehr gefährlich.</li></ul></div>`,
+    <li>Die Stadtmauer schützte vor Feinden.</li>
+    <li>Die Tore: Ohliger Tor, Neutor, Amtstor, Breidbacher Tor, Bachtor.</li>
+    <li>Die Häuser standen dicht, darum war Feuer sehr gefährlich.</li></ul></div>`,
 };
 
-/* =========================================================
-   SPIEL-DATEN: Ränge, Klingen, Abzeichen
-   ========================================================= */
+/* ===================== SPIEL-DATEN ===================== */
 const RAENGE=[
-  {name:"Lehrling",emo:"🧒",xp:0},
-  {name:"Schmiedjunge",emo:"👦",xp:120},
-  {name:"Geselle",emo:"🧑‍🔧",xp:300},
-  {name:"Schmied",emo:"👨‍🏭",xp:560},
-  {name:"Härter",emo:"🔥",xp:880},
-  {name:"Schleifmeister",emo:"✨",xp:1250},
-  {name:"Schwertfeger",emo:"⚔️",xp:1700},
-  {name:"Klingenmeister",emo:"🏆",xp:2300},
+  {name:"Lehrling",emo:"🧒",xp:0},{name:"Schmiedjunge",emo:"👦",xp:120},
+  {name:"Geselle",emo:"🧑‍🔧",xp:300},{name:"Schmied",emo:"👨‍🏭",xp:560},
+  {name:"Härter",emo:"🔥",xp:880},{name:"Schleifmeister",emo:"✨",xp:1250},
+  {name:"Schwertfeger",emo:"⚔️",xp:1700},{name:"Klingenmeister",emo:"🏆",xp:2300},
   {name:"Klingen-Legende",emo:"👑",xp:3200},
 ];
 const KLINGEN=[
-  {id:"messer",emo:"🔪",name:"Küchenmesser",preis:40},
-  {id:"dolch",emo:"🗡️",name:"Dolch",preis:90},
-  {id:"beil",emo:"🪓",name:"Beil",preis:160},
-  {id:"kurz",emo:"⚔️",name:"Kurzschwert",preis:260},
-  {id:"saebel",emo:"🏹",name:"Säbel",preis:400},
-  {id:"ritter",emo:"🛡️",name:"Ritterschwert",preis:600},
+  {id:"messer",emo:"🔪",name:"Küchenmesser",preis:40},{id:"dolch",emo:"🗡️",name:"Dolch",preis:90},
+  {id:"beil",emo:"🪓",name:"Beil",preis:160},{id:"kurz",emo:"⚔️",name:"Kurzschwert",preis:260},
+  {id:"saebel",emo:"🏹",name:"Säbel",preis:400},{id:"ritter",emo:"🛡️",name:"Ritterschwert",preis:600},
   {id:"gold",emo:"🏆",name:"Goldene Klinge",preis:900},
 ];
 const ABZEICHEN=[
@@ -495,535 +501,368 @@ const ABZEICHEN=[
   {id:"daily3",emo:"📅",name:"Fleißig",info:"3 Tagesaufgaben geschafft"},
 ];
 
-/* =========================================================
-   ZUSTAND
-   ========================================================= */
-const STD={xp:0,taler:0,blades:[],badges:[],bestCombo:0,correct:0,answered:0,
-  wappen:[],daily:{date:"",done:false,count:0},sound:true};
+/* ===================== ZUSTAND ===================== */
+const STD={xp:0,taler:0,blades:[],badges:[],bestCombo:0,correct:0,answered:0,wappen:[],daily:{date:"",done:false,count:0},sound:true,vorlesen:true};
 let S=ladeState();
-function ladeState(){
-  try{const r=JSON.parse(localStorage.getItem("solingen_game")||"{}");
-    return Object.assign({},STD,r,{daily:Object.assign({},STD.daily,r.daily||{})});}
-  catch(e){return Object.assign({},STD);}
-}
+function ladeState(){try{const r=JSON.parse(localStorage.getItem("solingen_game")||"{}");
+  return Object.assign({},STD,r,{daily:Object.assign({},STD.daily,r.daily||{})});}catch(e){return Object.assign({},STD);}}
 function save(){localStorage.setItem("solingen_game",JSON.stringify(S));}
-
 const $=s=>document.querySelector(s);
 const ansicht=$("#ansicht");
-
+function setView(html){ansicht.style.animation="none";ansicht.innerHTML=html;void ansicht.offsetWidth;ansicht.style.animation="seiteRein .38s ease";window.scrollTo(0,0);}
 function rangIndex(){let i=0;for(let k=0;k<RAENGE.length;k++){if(S.xp>=RAENGE[k].xp)i=k;}return i;}
 function heuteStr(){const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();}
+function mischen(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-/* =========================================================
-   HUD
-   ========================================================= */
-function hudUpdate(animBar){
+/* ===================== HUD ===================== */
+function hudUpdate(){
   const ri=rangIndex();const rang=RAENGE[ri];
-  $("#hud-avatar").textContent=rang.emo;
-  $("#hud-rang").textContent=rang.name;
-  $("#hud-sub").textContent="Level "+(ri+1);
-  $("#hud-taler").textContent=S.taler;
-  $("#ton-knopf").textContent=S.sound?"🔊":"🔇";
-  const naechste=RAENGE[ri+1];
-  const fuell=$("#xp-fuell");const txt=$("#xp-text");
-  if(naechste){
-    const span=naechste.xp-rang.xp;const fort=S.xp-rang.xp;
-    const proz=Math.max(0,Math.min(100,Math.round(fort/span*100)));
-    fuell.style.width=proz+"%";
-    txt.textContent=S.xp+" / "+naechste.xp+" Funken";
-  }else{fuell.style.width="100%";txt.textContent="MAX – "+S.xp+" Funken 👑";}
+  $("#hud-avatar").textContent=rang.emo;$("#hud-rang").textContent=rang.name;$("#hud-sub").textContent="Level "+(ri+1);
+  $("#hud-taler").textContent=S.taler;$("#ton-knopf").textContent=S.sound?"🔊":"🔇";
+  $("#ton-knopf").classList.toggle("aus",!S.sound);
+  $("#lies-toggle").classList.toggle("aus",!S.vorlesen);
+  const naechste=RAENGE[ri+1];const fuell=$("#xp-fuell"),txt=$("#xp-text");
+  if(naechste){const span=naechste.xp-rang.xp,fort=S.xp-rang.xp;
+    fuell.style.width=Math.max(0,Math.min(100,Math.round(fort/span*100)))+"%";txt.textContent=S.xp+" / "+naechste.xp+" Funken";}
+  else{fuell.style.width="100%";txt.textContent="MAX - "+S.xp+" Funken 👑";}
 }
 
-/* =========================================================
-   TON (WebAudio)
-   ========================================================= */
+/* ===================== TON (WebAudio) ===================== */
 let actx=null;
-function beep(freq,dur,type,vol){
-  if(!S.sound)return;
-  try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();
-    const o=actx.createOscillator(),g=actx.createGain();
-    o.type=type||"square";o.frequency.value=freq;o.connect(g);g.connect(actx.destination);
-    g.gain.setValueAtTime(vol||0.05,actx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+dur);
-    o.start();o.stop(actx.currentTime+dur);}catch(e){}
-}
+function beep(freq,dur,type,vol){if(!S.sound)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+  const o=actx.createOscillator(),g=actx.createGain();o.type=type||"square";o.frequency.value=freq;o.connect(g);g.connect(actx.destination);
+  g.gain.setValueAtTime(vol||0.05,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+dur);o.start();o.stop(actx.currentTime+dur);}catch(e){}}
 function tonRichtig(){beep(660,0.08,"square");setTimeout(()=>beep(990,0.12,"square"),90);}
 function tonFalsch(){beep(160,0.25,"sawtooth",0.06);}
 function tonMuenze(){beep(1320,0.07,"triangle",0.05);}
 function tonLevel(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,0.18,"square"),i*120));}
-function tonSchmied(){beep(220,0.05,"square",0.07);setTimeout(()=>beep(180,0.12,"sawtooth",0.06),70);}
+function tonSchmied(){beep(220,0.05,"square",0.07);setTimeout(()=>beep(170,0.13,"sawtooth",0.06),70);}
 function tonUmschalten(){S.sound=!S.sound;save();hudUpdate();if(S.sound)tonMuenze();}
 
-/* =========================================================
-   EFFEKTE
-   ========================================================= */
-function spark(x,y,farben){
-  farben=farben||["⭐","✨","🔥","💫"];
-  for(let i=0;i<10;i++){
-    const f=document.createElement("div");
-    f.className="funke";f.textContent=farben[Math.floor(Math.random()*farben.length)];
-    f.style.left=x+"px";f.style.top=y+"px";
-    document.body.appendChild(f);
-    const ang=Math.random()*Math.PI*2,dist=40+Math.random()*70;
-    const dx=Math.cos(ang)*dist,dy=Math.sin(ang)*dist-30;
-    f.animate([{transform:"translate(0,0) scale(1)",opacity:1},
-      {transform:`translate(${dx}px,${dy}px) scale(.3)`,opacity:0}],
-      {duration:700+Math.random()*300,easing:"ease-out"});
-    setTimeout(()=>f.remove(),1000);
-  }
+/* ===================== VORLESEN (Text-to-Speech) ===================== */
+let stimmen=[],dieStimme=null;
+function ladeStimmen(){try{stimmen=window.speechSynthesis?speechSynthesis.getVoices():[];
+  dieStimme=stimmen.find(v=>/^de[-_]/i.test(v.lang))||stimmen.find(v=>/de/i.test(v.lang))||null;}catch(e){}}
+if(window.speechSynthesis){ladeStimmen();speechSynthesis.onvoiceschanged=ladeStimmen;}
+function nurText(s){let t=String(s).replace(/<[^>]+>/g," ");
+  t=t.replace(/[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}\u{20E3}]/gu," ");
+  t=t.replace(/[„“”»«]/g,"").replace(/\s+/g," ").trim();return t;}
+let letzterVorlesetext="";
+function sprich(text,force){
+  if(!window.speechSynthesis)return;
+  const t=nurText(text);letzterVorlesetext=t;
+  bubble(t);
+  if(!S.vorlesen&&!force)return;
+  try{speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(t);u.lang="de-DE";if(dieStimme)u.voice=dieStimme;u.rate=0.92;u.pitch=1.06;
+    const fig=$("#klingo-fig");if(fig)fig.classList.add("redet");
+    u.onend=()=>{const f=$("#klingo-fig");if(f)f.classList.remove("redet");};
+    speechSynthesis.speak(u);}catch(e){}
 }
-function floatText(x,y,text,farbe){
-  const t=document.createElement("div");
-  t.className="floattext";t.textContent=text;t.style.color=farbe||"#ffd65a";
-  t.style.left=x+"px";t.style.top=y+"px";
-  document.body.appendChild(t);setTimeout(()=>t.remove(),1000);
+function stopSprich(){try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}const f=$("#klingo-fig");if(f)f.classList.remove("redet");}
+function vorlesenUmschalten(){S.vorlesen=!S.vorlesen;save();hudUpdate();
+  if(S.vorlesen){sprich("Ich lese dir jetzt vor!",true);}else{stopSprich();bubble("Vorlesen ist aus. Tippe oben auf das Sprech-Symbol, um es wieder anzuschalten.");}}
+function liesKnopf(btn,text){
+  document.querySelectorAll(".lies-knopf.spricht").forEach(b=>b.classList.remove("spricht"));
+  if(btn)btn.classList.add("spricht");
+  sprich(text,true);
+  setTimeout(()=>{if(btn)btn.classList.remove("spricht");},Math.min(9000,1500+nurText(text).length*55));
 }
+
+/* ===================== MASKOTTCHEN ===================== */
+let bubbleTimer=null;
+function bubble(text){const b=$("#klingo-bubble");if(!b)return;b.textContent=text;b.classList.add("zeigen");
+  clearTimeout(bubbleTimer);bubbleTimer=setTimeout(()=>b.classList.remove("zeigen"),6000);}
+function klingoSagt(text){sprich(text);}
+function klingoWiederholen(){if(letzterVorlesetext)sprich(letzterVorlesetext,true);else sprich("Hallo, ich bin Schmiedemeister Klingo! Tippe auf Spielen, dann geht es los.",true);}
+function klingoWippe(){const f=$("#klingo-fig");if(f){f.classList.remove("redet");void f.offsetWidth;f.classList.add("redet");setTimeout(()=>f.classList.remove("redet"),800);}}
+
+/* ===================== EFFEKTE ===================== */
+function spark(x,y,farben){farben=farben||["⭐","✨","🔥","💫"];
+  for(let i=0;i<10;i++){const f=document.createElement("div");f.className="funke";f.textContent=farben[Math.floor(Math.random()*farben.length)];
+    f.style.left=x+"px";f.style.top=y+"px";document.body.appendChild(f);
+    const ang=Math.random()*Math.PI*2,dist=40+Math.random()*70,dx=Math.cos(ang)*dist,dy=Math.sin(ang)*dist-30;
+    f.animate([{transform:"translate(0,0) scale(1)",opacity:1},{transform:`translate(${dx}px,${dy}px) scale(.3)`,opacity:0}],{duration:700+Math.random()*300,easing:"ease-out"});
+    setTimeout(()=>f.remove(),1000);}}
+function floatText(x,y,text,farbe){const t=document.createElement("div");t.className="floattext";t.textContent=text;t.style.color=farbe||"#ffd65a";
+  t.style.left=x+"px";t.style.top=y+"px";document.body.appendChild(t);setTimeout(()=>t.remove(),1000);}
 function mittelpunkt(el){const r=el.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2};}
 function avatarHop(){const a=$("#hud-avatar");a.classList.remove("hop");void a.offsetWidth;a.classList.add("hop");}
+function flash(klasse){const f=document.createElement("div");f.className="flash "+klasse;document.body.appendChild(f);setTimeout(()=>f.remove(),550);}
+function rumpeln(muster){try{if(navigator.vibrate)navigator.vibrate(muster);}catch(e){}}
+function konfettiGross(){const x=window.innerWidth/2,y=window.innerHeight/3;
+  for(let i=0;i<4;i++)setTimeout(()=>spark(x+(Math.random()*200-100),y,["🎉","⭐","⚔️","🏆","✨","🔥"]),i*150);}
+/* Ripple auf Buttons */
+document.addEventListener("pointerdown",e=>{const b=e.target.closest("button");if(!b)return;
+  const r=b.getBoundingClientRect();const rip=document.createElement("span");rip.className="ripple";
+  const size=Math.max(r.width,r.height);rip.style.width=rip.style.height=size+"px";
+  rip.style.left=(e.clientX-r.left-size/2)+"px";rip.style.top=(e.clientY-r.top-size/2)+"px";
+  b.appendChild(rip);setTimeout(()=>rip.remove(),500);},{passive:true});
 
-/* =========================================================
-   BELOHNUNG + LEVEL-UP + ABZEICHEN
-   ========================================================= */
-function belohnung(funken,taler,el){
-  const ri0=rangIndex();
-  S.xp+=funken;S.taler+=taler;
-  save();
-  if(el){const p=mittelpunkt(el);
-    spark(p.x,p.y);
-    floatText(p.x-10,p.y-20,"+"+funken+" 🔥","#ff9a3c");
-    if(taler)floatText(p.x+30,p.y-10,"+"+taler+" 🪙","#ffd65a");
-  }
-  tonMuenze();
-  hudUpdate(true);avatarHop();
-  const ri1=rangIndex();
-  pruefeAbzeichen();
-  if(ri1>ri0)levelUp(ri1);
-}
-function levelUp(ri){
-  const rang=RAENGE[ri];
-  tonLevel();
+/* ===================== BELOHNUNG / LEVELUP / ABZEICHEN ===================== */
+function belohnung(funken,taler,el){const ri0=rangIndex();S.xp+=funken;S.taler+=taler;save();
+  if(el){const p=mittelpunkt(el);spark(p.x,p.y);floatText(p.x-10,p.y-20,"+"+funken+" 🔥","#ff9a3c");if(taler)floatText(p.x+30,p.y-10,"+"+taler+" 🪙","#ffd65a");}
+  tonMuenze();hudUpdate();avatarHop();pruefeAbzeichen();const ri1=rangIndex();if(ri1>ri0)levelUp(ri1);}
+function levelUp(ri){const rang=RAENGE[ri];tonLevel();rumpeln([60,40,60]);
   for(let i=0;i<3;i++)setTimeout(()=>spark(window.innerWidth/2,window.innerHeight/2,["⚔️","🏆","⭐","🔥","👑"]),i*200);
-  const ov=document.createElement("div");
-  ov.className="overlay";
-  ov.innerHTML=`<div class="strahl">${rang.emo}</div>
-    <h2>Aufgestiegen!</h2>
-    <p>Du bist jetzt</p>
-    <div class="neu-rang">${rang.name} (Level ${ri+1})</div>
-    <button onclick="this.parentElement.remove()">Weiter schmieden 🔨</button>`;
+  const ov=document.createElement("div");ov.className="overlay";
+  ov.innerHTML=`<div class="strahl">${rang.emo}</div><h2>Aufgestiegen!</h2><p>Du bist jetzt</p>
+    <div class="neu-rang">${rang.name} (Level ${ri+1})</div><button onclick="this.parentElement.remove()">Weiter schmieden 🔨</button>`;
   document.body.appendChild(ov);
-  if(rang.name==="Schmied")vergebeAbzeichen("schmied");
-  if(rang.name==="Klingenmeister")vergebeAbzeichen("meister");
-}
-function vergebeAbzeichen(id){
-  if(S.badges.includes(id))return;
-  S.badges.push(id);save();
-  const ab=ABZEICHEN.find(a=>a.id===id);
-  const t=document.createElement("div");
-  t.className="floattext";t.textContent="🏅 Abzeichen: "+ab.name+"!";
-  t.style.left=(window.innerWidth/2-110)+"px";t.style.top=(window.innerHeight-140)+"px";
-  t.style.fontSize="1.05rem";t.style.color="#ffd65a";
-  t.style.animationDuration="2s";
-  document.body.appendChild(t);setTimeout(()=>t.remove(),2000);
-  beep(880,0.15,"triangle");
-}
-function pruefeAbzeichen(){
-  if(S.correct>=1)vergebeAbzeichen("funke");
-  if(S.bestCombo>=5)vergebeAbzeichen("combo5");
-  if(S.bestCombo>=10)vergebeAbzeichen("combo10");
-  if(S.correct>=25)vergebeAbzeichen("c25");
-  if(S.correct>=100)vergebeAbzeichen("c100");
-  if(S.wappen.length>=4)vergebeAbzeichen("wappen");
-  if(S.blades.length>=KLINGEN.length)vergebeAbzeichen("sammler");
-  if((S.daily.count||0)>=3)vergebeAbzeichen("daily3");
-}
+  sprich("Aufgestiegen! Du bist jetzt "+rang.name+"! Super gemacht!",true);
+  if(rang.name==="Schmied")vergebeAbzeichen("schmied");if(rang.name==="Klingenmeister")vergebeAbzeichen("meister");}
+function vergebeAbzeichen(id){if(S.badges.includes(id))return;S.badges.push(id);save();
+  const ab=ABZEICHEN.find(a=>a.id===id);const t=document.createElement("div");t.className="floattext";t.textContent="🏅 Abzeichen: "+ab.name+"!";
+  t.style.left=(window.innerWidth/2-110)+"px";t.style.top=(window.innerHeight-150)+"px";t.style.fontSize="1.05rem";t.style.color="#ffd65a";t.style.animationDuration="2s";
+  document.body.appendChild(t);setTimeout(()=>t.remove(),2000);beep(880,0.15,"triangle");}
+function pruefeAbzeichen(){if(S.correct>=1)vergebeAbzeichen("funke");if(S.bestCombo>=5)vergebeAbzeichen("combo5");
+  if(S.bestCombo>=10)vergebeAbzeichen("combo10");if(S.correct>=25)vergebeAbzeichen("c25");if(S.correct>=100)vergebeAbzeichen("c100");
+  if(S.wappen.length>=4)vergebeAbzeichen("wappen");if(S.blades.length>=KLINGEN.length)vergebeAbzeichen("sammler");if((S.daily.count||0)>=3)vergebeAbzeichen("daily3");}
 
-function konfettiGross(){
-  const x=window.innerWidth/2,y=window.innerHeight/3;
-  for(let i=0;i<4;i++)setTimeout(()=>spark(x+(Math.random()*200-100),y,["🎉","⭐","⚔️","🏆","✨","🔥"]),i*150);
-}
-function mischen(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
-
-/* =========================================================
-   STARTBILDSCHIRM
-   ========================================================= */
-function startseite(){
-  const ri=rangIndex();const rang=RAENGE[ri];const naechste=RAENGE[ri+1];
-  // Tagesaufgabe-Status prüfen
+/* ===================== STARTBILDSCHIRM ===================== */
+const KLINGO_SPRUECHE=["Willkommen in meiner Schmiede! Lass uns Wissen schmieden!","Bereit, Lehrling? Auf zur Klinge!","Heiß ist das Eisen! Spielen wir!","Werde zum Klingenmeister von Solingen!"];
+function startseite(begruessen){
+  const ri=rangIndex(),rang=RAENGE[ri],naechste=RAENGE[ri+1];
   if(S.daily.date!==heuteStr()){S.daily.date=heuteStr();S.daily.done=false;save();}
-  let naechstText = naechste? `Noch ${naechste.xp-S.xp} Funken bis <b>${naechste.name}</b>` : "Höchster Rang erreicht! 👑";
-  let h=`
-    <h1 class="titel">⚔️ Solinger Klingenschmiede ⚓</h1>
-    <div class="titel-sub">Werde vom Lehrling zum Klingenmeister!</div>
-    <div class="held-karte">
-      <div class="gross-avatar">${rang.emo}</div>
-      <div class="rang-name" style="font-size:1.2rem">${rang.name}</div>
-      <div class="naechster">${naechstText}</div>
-      <button class="spielen-knopf" onclick="modusQuiz('alle')">▶️ Spielen &amp; Funken sammeln</button>
-    </div>
-
+  const naechstText=naechste?`Noch ${naechste.xp-S.xp} Funken bis <b>${naechste.name}</b>`:"Höchster Rang erreicht! 👑";
+  let h=`<h1 class="titel">⚔️ Solinger Klingenschmiede ⚓</h1><div class="titel-sub">Werde vom Lehrling zum Klingenmeister!</div>
+    <div class="schmiede-szene"><span class="glut-klinge">🗡️</span><span class="amboss">🪨</span><span class="hammer">🔨</span></div>
+    <div class="held-karte"><div class="rang-name">${rang.emo} ${rang.name}</div><div class="naechster">${naechstText}</div>
+      <button class="spielen-knopf" onclick="modusQuiz('alle')">▶️ Spielen &amp; Funken sammeln</button></div>
     <div class="tages-banner ${S.daily.done?'fertig':''}" onclick="${S.daily.done?'':'tagesAufgabe()'}">
-      <span class="emo">${S.daily.done?'✅':'📅'}</span>
-      <div><b>Tagesaufgabe</b><span>${S.daily.done?'Heute schon geschafft – komm morgen wieder!':'5 Fragen für extra Funken &amp; Taler 🪙'}</span></div>
-    </div>
-
-    <h2>🎮 Spiel-Modi</h2>
-    <div class="modus-reihe">
-      <button class="modus-knopf" onclick="modusQuiz('alle')"><span class="emo">❓</span><span class="txt"><b>Großes Quiz</b><span>Fragen aus allen Themen – baue Combos!</span></span></button>
+      <span class="emo">${S.daily.done?'✅':'📅'}</span><div><b>Tagesaufgabe</b><span>${S.daily.done?'Heute geschafft – komm morgen wieder!':'5 Fragen für extra Funken &amp; Taler 🪙'}</span></div></div>
+    <h2>🎮 Spiel-Modi</h2><div class="modus-reihe">
+      <button class="modus-knopf" onclick="modusQuiz('alle')"><span class="emo">❓</span><span class="txt"><b>Großes Quiz</b><span>Fragen aus allen Themen, baue Combos!</span></span></button>
       <button class="modus-knopf" onclick="zeigeLuecken()"><span class="emo">✏️</span><span class="txt"><b>Lückentext</b><span>Wörter einsetzen</span></span></button>
       <button class="modus-knopf" onclick="zeigeZuordnung()"><span class="emo">🔗</span><span class="txt"><b>Zuordnen</b><span>Was gehört zusammen?</span></span></button>
-      <button class="modus-knopf" onclick="zeigeWappen()"><span class="emo">🛡️</span><span class="txt"><b>Wappen-Werkstatt</b><span>Tippe die Teile des Wappens an</span></span></button>
-    </div>
-
-    <h2>🔥 Deine Schmiede</h2>
-    <div class="modus-reihe">
-      <button class="modus-knopf" onclick="zeigeSchmiede()" style="border-left-color:var(--gold)"><span class="emo">⚒️</span><span class="txt"><b>Klingen schmieden</b><span>Gib Taler aus &amp; sammle ${S.blades.length}/${KLINGEN.length} Klingen</span></span></button>
-      <button class="modus-knopf" onclick="zeigeAbzeichen()" style="border-left-color:var(--gold)"><span class="emo">🏅</span><span class="txt"><b>Abzeichen</b><span>${S.badges.length}/${ABZEICHEN.length} gesammelt</span></span></button>
-    </div>
-
-    <h2>📚 Lerne Thema für Thema</h2>
-    <div class="gitter">`;
+      <button class="modus-knopf" onclick="zeigeWappen()"><span class="emo">🛡️</span><span class="txt"><b>Wappen-Werkstatt</b><span>Tippe die Teile an</span></span></button></div>
+    <h2>🔥 Deine Schmiede</h2><div class="modus-reihe">
+      <button class="modus-knopf" onclick="zeigeSchmiede()" style="border-left-color:var(--gold)"><span class="emo">⚒️</span><span class="txt"><b>Klingen schmieden</b><span>${S.blades.length}/${KLINGEN.length} Klingen gesammelt</span></span></button>
+      <button class="modus-knopf" onclick="zeigeAbzeichen()" style="border-left-color:var(--gold)"><span class="emo">🏅</span><span class="txt"><b>Abzeichen</b><span>${S.badges.length}/${ABZEICHEN.length} gesammelt</span></span></button></div>
+    <h2>📚 Lerne Thema für Thema</h2><div class="gitter">`;
   THEMEN.forEach(t=>{h+=`<button class="kachel" onclick="themenseite('${t.id}')"><span class="emo">${t.emo}</span><span class="titel">${t.titel}</span><span class="mini">${t.mini}</span></button>`;});
-  h+=`</div>`;
-  ansicht.innerHTML=h;hudUpdate();window.scrollTo(0,0);
+  h+=`</div>`;setView(h);hudUpdate();
+  if(begruessen)sprich(KLINGO_SPRUECHE[Math.floor(Math.random()*KLINGO_SPRUECHE.length)]);
 }
 
-/* =========================================================
-   THEMENSEITE
-   ========================================================= */
-function themenseite(id){
-  const t=THEMEN.find(x=>x.id===id);
-  ansicht.innerHTML=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
-    <h2>${t.emo} ${t.titel}</h2>${WISSEN[id]}
+/* ===================== THEMENSEITE ===================== */
+function themenseite(id){const t=THEMEN.find(x=>x.id===id);
+  setView(`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
+    <h2>${t.emo} ${t.titel}</h2>
+    <button class="lies-knopf" onclick="liesKnopf(this,document.getElementById('wissenText').innerText)">🔊 Text vorlesen</button>
+    <div id="wissenText">${WISSEN[id]}</div>
     <div class="modus-reihe">
       <button class="modus-knopf" onclick="modusKarten('${id}')"><span class="emo">🃏</span><span class="txt"><b>Karteikarten</b><span>Umdrehen &amp; lernen</span></span></button>
-      <button class="modus-knopf" onclick="modusQuiz('${id}')"><span class="emo">❓</span><span class="txt"><b>Quiz zu diesem Thema</b><span>Funken verdienen</span></span></button>
-    </div>`;
-  window.scrollTo(0,0);
+      <button class="modus-knopf" onclick="modusQuiz('${id}')"><span class="emo">❓</span><span class="txt"><b>Quiz zu diesem Thema</b><span>Funken verdienen</span></span></button></div>`);
+  setTimeout(()=>{const el=$("#wissenText");if(el)sprich(el.innerText);},250);
 }
 
-/* =========================================================
-   KARTEIKARTEN
-   ========================================================= */
+/* ===================== KARTEIKARTEN ===================== */
 let kartenListe=[],kartenIdx=0;
 function modusKarten(id){kartenListe=mischen(KARTEN[id]);kartenIdx=0;zeigeKarte(id);}
-function zeigeKarte(id){
-  const k=kartenListe[kartenIdx];const t=THEMEN.find(x=>x.id===id);
-  ansicht.innerHTML=`<button class="zurueck" onclick="themenseite('${id}')">⬅️ Zurück</button>
-    <h2>🃏 ${t.titel}</h2>
+function zeigeKarte(id){const k=kartenListe[kartenIdx],t=THEMEN.find(x=>x.id===id);
+  setView(`<button class="zurueck" onclick="themenseite('${id}')">⬅️ Zurück</button><h2>🃏 ${t.titel}</h2>
     <div class="zaehler">Karte ${kartenIdx+1} von ${kartenListe.length}</div>
-    <div class="karte-flip" id="flip" onclick="this.classList.toggle('gedreht')">
-      <div class="karte-innen">
-        <div class="karte-seite karte-vorne"><div class="label">Frage ❓</div><div class="frage">${k.f}</div><div class="tipp">👆 Tippen für die Antwort</div></div>
-        <div class="karte-seite karte-hinten"><div class="label">Antwort ✅</div><div class="antwort">${k.a}</div>${k.t?`<div class="tipp">💡 ${k.t}</div>`:""}</div>
-      </div></div>
+    <div class="karte-flip" id="flip" onclick="kartenDreh('${id}')"><div class="karte-innen">
+      <div class="karte-seite karte-vorne"><div class="label">Frage ❓</div><div class="frage">${k.f}</div><div class="tipp">👆 Tippen für die Antwort</div></div>
+      <div class="karte-seite karte-hinten"><div class="label">Antwort ✅</div><div class="antwort">${k.a}</div>${k.t?`<div class="tipp">💡 ${k.t}</div>`:""}</div></div></div>
     <div class="karten-nav">
-      <button class="nav-knopf" onclick="event.stopPropagation();kartenZurueck('${id}')" ${kartenIdx===0?"disabled":""}>⬅️ Vorige</button>
-      <button class="nav-knopf" onclick="event.stopPropagation();kartenWeiter('${id}')">${kartenIdx===kartenListe.length-1?"Fertig 🏁":"Nächste ➡️"}</button>
-    </div>`;
-  window.scrollTo(0,0);
+      <button class="nav-knopf" onclick="event.stopPropagation();kartenZurueck('${id}')" ${kartenIdx===0?"disabled":""}>⬅️</button>
+      <button class="lies-knopf" onclick="event.stopPropagation();liesKnopf(this, document.querySelector('#flip').classList.contains('gedreht')?${JSON.stringify(k.a)}:${JSON.stringify(k.f)})">🔊 Vorlesen</button>
+      <button class="nav-knopf" onclick="event.stopPropagation();kartenWeiter('${id}')">${kartenIdx===kartenListe.length-1?"🏁":"➡️"}</button></div>`);
+  sprich(k.f);
 }
-function kartenWeiter(id){
-  if(kartenIdx<kartenListe.length-1){kartenIdx++;zeigeKarte(id);}
-  else{belohnung(15,5,$("#flip"));konfettiGross();
-    ansicht.innerHTML=`<div class="ergebnis"><div class="gross">🏆</div><div class="punkte">Alle Karten geschafft!</div>
-      <div class="lob">Fleiß-Bonus erhalten</div><div class="belohn">+15 Funken 🔥 · +5 Taler 🪙</div>
-      <div class="knopf-reihe"><button class="mini-knopf" onclick="modusKarten('${id}')">🔁 Nochmal</button>
-      <button class="mini-knopf" onclick="modusQuiz('${id}')">❓ Quiz</button>
-      <button class="mini-knopf" onclick="startseite()">🏠 Start</button></div></div>`;
-  }
-}
+function kartenDreh(id){const fl=$("#flip");fl.classList.toggle("gedreht");const k=kartenListe[kartenIdx];
+  if(fl.classList.contains("gedreht"))sprich(k.a+(k.t?". "+k.t:""));else sprich(k.f);}
+function kartenWeiter(id){if(kartenIdx<kartenListe.length-1){kartenIdx++;zeigeKarte(id);}
+  else{belohnung(15,5,$("#flip"));konfettiGross();sprich("Alle Karten geschafft! Toll gemacht!");
+    setView(`<div class="ergebnis"><div class="gross">🏆</div><div class="punkte">Alle Karten geschafft!</div><div class="lob">Fleiß-Bonus erhalten</div>
+      <div class="belohn">+15 Funken 🔥 · +5 Taler 🪙</div><div class="knopf-reihe">
+      <button class="mini-knopf" onclick="modusKarten('${id}')">🔁 Nochmal</button><button class="mini-knopf" onclick="modusQuiz('${id}')">❓ Quiz</button>
+      <button class="mini-knopf" onclick="startseite()">🏠 Start</button></div></div>`);}}
 function kartenZurueck(id){if(kartenIdx>0){kartenIdx--;zeigeKarte(id);}}
 
-/* =========================================================
-   QUIZ (mit Combo)
-   ========================================================= */
+/* ===================== QUIZ ===================== */
 let quizListe=[],quizIdx=0,quizRichtig=0,quizThemaId="alle",combo=0,istTages=false;
 const THEMA_MAP={geschichte:"Geschichte",wappen:"Wappen",staedte:"Die 5 Städte",berufe:"Berufe",wasser:"Wasser",haeuser:"Fachwerk & Feuer"};
-function modusQuiz(id){
-  istTages=false;quizThemaId=id;combo=0;
+function modusQuiz(id){istTages=false;quizThemaId=id;combo=0;
   let pool=id==="alle"?QUIZ.slice():QUIZ.filter(q=>q.thema===THEMA_MAP[id]);
-  quizListe=mischen(pool);if(id==="alle")quizListe=quizListe.slice(0,15);
-  quizIdx=0;quizRichtig=0;zeigeQuiz();
-}
-function tagesAufgabe(){
-  istTages=true;quizThemaId="alle";combo=0;
-  quizListe=mischen(QUIZ).slice(0,5);quizIdx=0;quizRichtig=0;zeigeQuiz();
-}
-function zeigeQuiz(){
-  const q=quizListe[quizIdx];
-  const opts=mischen(q.o.map((text,i)=>({text,korrekt:i===q.r})));
+  quizListe=mischen(pool);if(id==="alle")quizListe=quizListe.slice(0,15);quizIdx=0;quizRichtig=0;zeigeQuiz();}
+function tagesAufgabe(){istTages=true;quizThemaId="alle";combo=0;quizListe=mischen(QUIZ).slice(0,5);quizIdx=0;quizRichtig=0;zeigeQuiz();}
+function zeigeQuiz(){const q=quizListe[quizIdx];const opts=mischen(q.o.map((text,i)=>({text,korrekt:i===q.r})));
   const comboHtml=combo>=2?`<span class="feuer-combo">🔥 Combo x${combo}!</span>`:"";
+  const vorlesetext=q.f+". "+q.o.join(". ");
   let h=`<button class="zurueck" onclick="${istTages?'startseite()':(quizThemaId==='alle'?'startseite()':"themenseite('"+quizThemaId+"')")}">⬅️ Zurück</button>
-    <h2>${istTages?'📅 Tagesaufgabe':'❓ Quiz'}</h2>
-    <div class="combo-anzeige">${comboHtml}</div>
-    <div class="quiz-frage">
-      <div class="nr">Frage ${quizIdx+1}/${quizListe.length} · ⭐ ${quizRichtig} richtig</div>
+    <h2>${istTages?'📅 Tagesaufgabe':'❓ Quiz'}</h2><div class="combo-anzeige">${comboHtml}</div>
+    <div class="quiz-frage"><div class="nr">Frage ${quizIdx+1}/${quizListe.length} · ⭐ ${quizRichtig} richtig</div>
       <div class="thema">${q.thema}</div><div class="text">${q.f}</div>
+      <button class="lies-knopf" onclick="liesKnopf(this,${JSON.stringify(vorlesetext)})">🔊 Frage &amp; Antworten vorlesen</button>
       <div class="antworten">`;
-  opts.forEach(o=>{h+=`<button class="antwort-knopf" data-k="${o.korrekt}" onclick="antwortKlick(this,event)">${o.text}</button>`;});
-  h+=`</div><div class="rueckmeldung" id="rueck"></div></div>`;
-  ansicht.innerHTML=h;window.scrollTo(0,0);
+  opts.forEach(o=>{h+=`<button class="antwort-knopf" data-k="${o.korrekt}" onclick="antwortKlick(this)">${o.text}</button>`;});
+  h+=`</div><div class="rueckmeldung" id="rueck"></div></div>`;setView(h);
+  sprich(vorlesetext);
 }
-function antwortKlick(btn,ev){
-  const korrekt=btn.dataset.k==="true";
-  const alle=ansicht.querySelectorAll(".antwort-knopf");
+function antwortKlick(btn){const korrekt=btn.dataset.k==="true";const alle=ansicht.querySelectorAll(".antwort-knopf");
   alle.forEach(b=>{b.disabled=true;if(b.dataset.k==="true")b.classList.add("richtig");});
-  const rueck=$("#rueck");
-  S.answered++;
-  if(korrekt){
-    btn.classList.add("richtig");quizRichtig++;combo++;S.correct++;
-    if(combo>S.bestCombo)S.bestCombo=combo;
-    const bonus=Math.min(combo-1,5)*3;  // Combo-Bonus
-    const funken=10+bonus;const taler=5+(combo>=3?2:0);
-    tonRichtig();
-    belohnung(funken,taler,btn);
+  const rueck=$("#rueck");S.answered++;
+  if(korrekt){btn.classList.add("richtig");quizRichtig++;combo++;S.correct++;if(combo>S.bestCombo)S.bestCombo=combo;
+    const bonus=Math.min(combo-1,5)*3;const funken=10+bonus,taler=5+(combo>=3?2:0);
+    tonRichtig();rumpeln(30);flash("gut");belohnung(funken,taler,btn);
     rueck.className="rueckmeldung gut zeigen";
     rueck.innerHTML=`✅ <b>Richtig!</b> +${funken} Funken 🔥`+(bonus?` <b>(+${bonus} Combo-Bonus!)</b>`:``)+` · +${taler} Taler 🪙`;
-  }else{
-    btn.classList.add("falsch");combo=0;
-    tonFalsch();
-    ansicht.querySelector("h2").classList.add("shake");
+    const lob=combo>=3?["Stark!","Super!","Weiter so!","Klasse!"][combo%4]:"Richtig!";sprich(lob);}
+  else{btn.classList.add("falsch");combo=0;tonFalsch();rumpeln([40,40,40]);flash("schlecht");
+    ansicht.querySelector("h2").classList.add("shake");save();
     const richtigeAntwort=[...alle].find(b=>b.dataset.k==="true").textContent;
     rueck.className="rueckmeldung schlecht zeigen";
     rueck.innerHTML=`❌ Nicht ganz. Richtig ist: <b>${richtigeAntwort}</b><br><span style="font-size:.85rem">Combo verloren – neuer Anlauf!</span>`;
-  }
+    sprich("Leider falsch. Richtig ist: "+richtigeAntwort);}
   const letzte=quizIdx===quizListe.length-1;
-  rueck.innerHTML+=`<button class="weiter-knopf" onclick="quizWeiter()">${letzte?"Ergebnis 🏁":"Weiter ➡️"}</button>`;
-  save();
-}
+  rueck.innerHTML+=`<button class="weiter-knopf" onclick="quizWeiter()">${letzte?"Ergebnis 🏁":"Weiter ➡️"}</button>`;}
 function quizWeiter(){if(quizIdx<quizListe.length-1){quizIdx++;zeigeQuiz();}else quizErgebnis();}
-function quizErgebnis(){
-  const gesamt=quizListe.length;const quote=quizRichtig/gesamt;
+function quizErgebnis(){const gesamt=quizListe.length,quote=quizRichtig/gesamt;
   let emo="💪",lob="Weiter üben – du schaffst das!",bonus=0;
   if(quote===1){emo="🏆";lob="Perfekt! Alles richtig!";bonus=30;konfettiGross();}
   else if(quote>=0.7){emo="🌟";lob="Sehr gut gemacht!";bonus=15;konfettiGross();}
   else if(quote>=0.5){emo="👍";lob="Gut! Schau die Themen nochmal an.";bonus=5;}
-  if(istTages){
-    bonus+=20;S.daily.done=true;S.daily.count=(S.daily.count||0)+1;
-  }
-  S.xp+=bonus;if(bonus)S.taler+=Math.round(bonus/2);
-  save();hudUpdate(true);pruefeAbzeichen();
-  ansicht.innerHTML=`<div class="ergebnis"><div class="gross">${emo}</div>
-    <div class="punkte">${quizRichtig} von ${gesamt} richtig</div>
-    <div class="lob">${lob}</div>
-    <div class="belohn">${istTages?'📅 Tagesaufgabe geschafft! ':''}Bonus: +${bonus} Funken 🔥${bonus?` · +${Math.round(bonus/2)} Taler 🪙`:''}</div>
-    <div class="knopf-reihe">
-      ${istTages?'':`<button class="mini-knopf" onclick="modusQuiz('${quizThemaId}')">🔁 Nochmal</button>`}
-      <button class="mini-knopf" onclick="zeigeSchmiede()">⚒️ Schmiede</button>
-      <button class="mini-knopf" onclick="startseite()">🏠 Start</button></div></div>`;
-  window.scrollTo(0,0);
-}
+  if(istTages){bonus+=20;S.daily.done=true;S.daily.count=(S.daily.count||0)+1;}
+  S.xp+=bonus;if(bonus)S.taler+=Math.round(bonus/2);save();hudUpdate();pruefeAbzeichen();
+  setView(`<div class="ergebnis"><div class="gross">${emo}</div><div class="punkte">${quizRichtig} von ${gesamt} richtig</div>
+    <div class="lob">${lob}</div><div class="belohn">${istTages?'📅 Tagesaufgabe geschafft! ':''}Bonus: +${bonus} Funken 🔥${bonus?` · +${Math.round(bonus/2)} Taler 🪙`:''}</div>
+    <div class="schaerf-box"><div style="font-size:.9rem;color:var(--gold-hell);font-weight:bold">🔨 Mini-Spiel: Tippe 5× auf die Klinge zum Schärfen!</div>
+      <div class="schaerf-klinge" id="schaerf" onclick="schaerfen()">🗡️</div>
+      <div class="schaerf-bar"><div class="schaerf-fuell" id="schaerfFuell"></div></div>
+      <div id="schaerfInfo" style="font-size:.8rem;color:var(--grau);margin-top:6px">5 Taler Bonus warten! 🪙</div></div>
+    <div class="knopf-reihe">${istTages?'':`<button class="mini-knopf" onclick="modusQuiz('${quizThemaId}')">🔁 Nochmal</button>`}
+      <button class="mini-knopf" onclick="zeigeSchmiede()">⚒️ Schmiede</button><button class="mini-knopf" onclick="startseite()">🏠 Start</button></div></div>`);
+  schaerfStand=0;
+  let txt=lob;if(quote===1)txt="Perfekt! Alles richtig! "+(bonus?"Bonus erhalten!":"");sprich(txt+" Tippe jetzt zum Schärfen auf die Klinge.");}
+let schaerfStand=0;
+function schaerfen(){if(schaerfStand>=5)return;schaerfStand++;
+  const p=mittelpunkt($("#schaerf"));spark(p.x,p.y,["🔨","✨","🔥","⭐"]);tonSchmied();rumpeln(20);
+  $("#schaerfFuell").style.width=(schaerfStand/5*100)+"%";
+  if(schaerfStand>=5){S.taler+=5;save();hudUpdate();floatText(p.x,p.y-30,"+5 🪙","#ffd65a");
+    $("#schaerfInfo").innerHTML="✨ <b>Scharf!</b> +5 Taler erhalten 🪙";$("#schaerf").style.animation="shineBlade 1s infinite";sprich("Scharf! Fünf Taler Bonus!");}}
 
-/* =========================================================
-   LÜCKENTEXT
-   ========================================================= */
+/* ===================== LÜCKENTEXT ===================== */
 let lueckeIdx=0,lueckeOffen=0;
 function zeigeLuecken(){lueckeIdx=0;startLuecke();}
-function startLuecke(){
-  const akt=LUECKEN[lueckeIdx];let satzHtml="",nr=0;
-  akt.teile.forEach((teil,i)=>{
-    if(i%2===1){satzHtml+=`<span class="luecke" data-loesung="${teil}"></span>`;nr++;}
-    else satzHtml+=teil;
-  });
-  lueckeOffen=nr;
-  let chips="";mischen(akt.woerter).forEach(w=>{chips+=`<button class="wort-chip" data-wort="${w}" onclick="wortGesetzt(this,event)">${w}</button>`;});
-  ansicht.innerHTML=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
-    <h2>✏️ Lückentext</h2><div class="zaehler">Satz ${lueckeIdx+1} von ${LUECKEN.length}</div>
+function startLuecke(){const akt=LUECKEN[lueckeIdx];let satzHtml="",nr=0,vorlese="";
+  akt.teile.forEach((teil,i)=>{if(i%2===1){satzHtml+=`<span class="luecke" data-loesung="${teil}"></span>`;vorlese+=" ... ";nr++;}else{satzHtml+=teil;vorlese+=teil;}});
+  lueckeOffen=nr;let chips="";mischen(akt.woerter).forEach(w=>{chips+=`<button class="wort-chip" data-wort="${w}" onclick="wortGesetzt(this)">${w}</button>`;});
+  setView(`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button><h2>✏️ Lückentext</h2>
+    <div class="zaehler">Satz ${lueckeIdx+1} von ${LUECKEN.length}</div>
     <div class="quiz-frage"><div class="luecke-satz">${satzHtml}</div></div>
     <p style="text-align:center;color:var(--grau);font-size:.9rem">Tippe das passende Wort 👇</p>
-    <div class="wort-wolke">${chips}</div><div class="rueckmeldung" id="rueckL"></div>`;
-  window.scrollTo(0,0);
-}
-function wortGesetzt(btn,ev){
-  const wort=btn.dataset.wort;
-  const luecken=[...ansicht.querySelectorAll(".luecke")];
-  let ziel=luecken.find(l=>!l.classList.contains("gefuellt")&&l.dataset.loesung===wort)
-        || luecken.find(l=>!l.classList.contains("gefuellt"));
-  if(!ziel)return;
-  const richtig=ziel.dataset.loesung===wort;
-  ziel.textContent=wort;ziel.classList.add("gefuellt");
-  if(!richtig){ziel.style.borderBottomColor="var(--rot)";ziel.style.color="var(--rot)";tonFalsch();}
-  else tonMuenze();
-  btn.classList.add("benutzt");btn.disabled=true;lueckeOffen--;
-  if(lueckeOffen<=0)lueckeAuswerten(btn);
-}
-function lueckeAuswerten(letzterBtn){
-  const luecken=[...ansicht.querySelectorAll(".luecke")];
-  const allesRichtig=luecken.every(l=>l.dataset.loesung===l.textContent);
-  const rueck=$("#rueckL");const letzte=lueckeIdx===LUECKEN.length-1;
-  if(allesRichtig){S.correct++;S.answered++;belohnung(12,4,letzterBtn);
-    rueck.className="rueckmeldung gut zeigen";rueck.innerHTML=`✅ <b>Alles richtig!</b> +12 Funken 🔥 · +4 Taler 🪙`;}
-  else{S.answered++;save();tonFalsch();
-    rueck.className="rueckmeldung schlecht zeigen";
-    rueck.innerHTML=`Fast! Die Lösung war: <b>${luecken.map(l=>l.dataset.loesung).join(" … ")}</b>`;}
-  rueck.innerHTML+=`<button class="weiter-knopf" onclick="lueckeWeiter()">${letzte?"Fertig 🏁":"Nächster Satz ➡️"}</button>`;
-}
-function lueckeWeiter(){
-  if(lueckeIdx<LUECKEN.length-1){lueckeIdx++;startLuecke();}
-  else{konfettiGross();
-    ansicht.innerHTML=`<div class="ergebnis"><div class="gross">🏆</div><div class="punkte">Lückentext geschafft!</div>
-      <div class="lob">Toll gemacht!</div>
-      <div class="knopf-reihe"><button class="mini-knopf" onclick="zeigeLuecken()">🔁 Nochmal</button>
-      <button class="mini-knopf" onclick="startseite()">🏠 Start</button></div></div>`;}
-}
+    <div class="wort-wolke">${chips}</div><div class="rueckmeldung" id="rueckL"></div>`);
+  sprich("Setze die richtigen Wörter ein. "+vorlese);}
+function wortGesetzt(btn){const wort=btn.dataset.wort;const luecken=[...ansicht.querySelectorAll(".luecke")];
+  let ziel=luecken.find(l=>!l.classList.contains("gefuellt")&&l.dataset.loesung===wort)||luecken.find(l=>!l.classList.contains("gefuellt"));
+  if(!ziel)return;const richtig=ziel.dataset.loesung===wort;ziel.textContent=wort;ziel.classList.add("gefuellt");
+  if(!richtig){ziel.style.borderBottomColor="var(--rot)";ziel.style.color="var(--rot)";tonFalsch();rumpeln([40,40]);}else{tonMuenze();rumpeln(20);}
+  btn.classList.add("benutzt");btn.disabled=true;lueckeOffen--;if(lueckeOffen<=0)lueckeAuswerten(btn);}
+function lueckeAuswerten(letzterBtn){const luecken=[...ansicht.querySelectorAll(".luecke")];
+  const allesRichtig=luecken.every(l=>l.dataset.loesung===l.textContent);const rueck=$("#rueckL");const letzte=lueckeIdx===LUECKEN.length-1;
+  if(allesRichtig){S.correct++;S.answered++;flash("gut");belohnung(12,4,letzterBtn);
+    rueck.className="rueckmeldung gut zeigen";rueck.innerHTML=`✅ <b>Alles richtig!</b> +12 Funken 🔥 · +4 Taler 🪙`;sprich("Alles richtig! Super!");}
+  else{S.answered++;save();tonFalsch();flash("schlecht");
+    rueck.className="rueckmeldung schlecht zeigen";rueck.innerHTML=`Fast! Die Lösung war: <b>${luecken.map(l=>l.dataset.loesung).join(" … ")}</b>`;sprich("Fast! Schau dir die Lösung an.");}
+  rueck.innerHTML+=`<button class="weiter-knopf" onclick="lueckeWeiter()">${letzte?"Fertig 🏁":"Nächster Satz ➡️"}</button>`;}
+function lueckeWeiter(){if(lueckeIdx<LUECKEN.length-1){lueckeIdx++;startLuecke();}
+  else{konfettiGross();sprich("Lückentext geschafft! Toll gemacht!");
+    setView(`<div class="ergebnis"><div class="gross">🏆</div><div class="punkte">Lückentext geschafft!</div><div class="lob">Toll gemacht!</div>
+      <div class="knopf-reihe"><button class="mini-knopf" onclick="zeigeLuecken()">🔁 Nochmal</button><button class="mini-knopf" onclick="startseite()">🏠 Start</button></div></div>`);}}
 
-/* =========================================================
-   ZUORDNUNG
-   ========================================================= */
+/* ===================== ZUORDNUNG ===================== */
 let zoIdx=0,zoGeloest=0;
 function zeigeZuordnung(){zoIdx=0;startZuordnung();}
-function startZuordnung(){
-  zoGeloest=0;const z=ZUORDNUNGEN[zoIdx];
-  let h=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
-    <h2>🔗 Zuordnen</h2><div class="zaehler">Aufgabe ${zoIdx+1} von ${ZUORDNUNGEN.length}</div>
+function startZuordnung(){zoGeloest=0;const z=ZUORDNUNGEN[zoIdx];
+  let h=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button><h2>🔗 Zuordnen</h2>
+    <div class="zaehler">Aufgabe ${zoIdx+1} von ${ZUORDNUNGEN.length}</div>
     <h2 style="font-size:1.02rem;text-align:center;color:var(--gold-hell)">${z.titel}</h2>`;
-  z.paare.forEach((p,pi)=>{
-    h+=`<div class="zo-paar"><div class="zo-begriff">${p.begriff}</div><div class="zo-optionen">`;
-    mischen(p.optionen).forEach(opt=>{h+=`<button class="zo-opt" data-paar="${pi}" data-richtig="${opt===p.richtig}" onclick="zoKlick(this,event)">${opt}</button>`;});
-    h+=`</div></div>`;
-  });
-  h+=`<div class="rueckmeldung" id="rueckZ"></div>`;
-  ansicht.innerHTML=h;window.scrollTo(0,0);
-}
-function zoKlick(btn,ev){
-  const paar=btn.dataset.paar;
-  const geschwister=ansicht.querySelectorAll(`.zo-opt[data-paar="${paar}"]`);
-  if([...geschwister].some(b=>b.disabled&&b.classList.contains("richtig")))return;
-  const richtig=btn.dataset.richtig==="true";
-  if(richtig){btn.classList.add("richtig");geschwister.forEach(b=>b.disabled=true);
-    zoGeloest++;S.correct++;S.answered++;belohnung(8,3,btn);
+  z.paare.forEach((p,pi)=>{h+=`<div class="zo-paar"><div class="zo-begriff">${p.begriff}</div><div class="zo-optionen">`;
+    mischen(p.optionen).forEach(opt=>{h+=`<button class="zo-opt" data-paar="${pi}" data-richtig="${opt===p.richtig}" onclick="zoKlick(this)">${opt}</button>`;});h+=`</div></div>`;});
+  h+=`<div class="rueckmeldung" id="rueckZ"></div>`;setView(h);sprich(z.titel+". Tippe die richtige Antwort an.");}
+function zoKlick(btn){const paar=btn.dataset.paar;const geschwister=ansicht.querySelectorAll(`.zo-opt[data-paar="${paar}"]`);
+  if([...geschwister].some(b=>b.disabled&&b.classList.contains("richtig")))return;const richtig=btn.dataset.richtig==="true";
+  if(richtig){btn.classList.add("richtig");geschwister.forEach(b=>b.disabled=true);zoGeloest++;S.correct++;S.answered++;tonRichtig();rumpeln(30);belohnung(8,3,btn);
     if(zoGeloest>=ZUORDNUNGEN[zoIdx].paare.length)zoFertig();}
-  else{btn.classList.add("falsch");btn.disabled=true;tonFalsch();}
-}
-function zoFertig(){
-  const rueck=$("#rueckZ");const letzte=zoIdx===ZUORDNUNGEN.length-1;
-  rueck.className="rueckmeldung gut zeigen";
-  rueck.innerHTML=`✅ <b>Alles zugeordnet!</b><button class="weiter-knopf" onclick="zoWeiter()">${letzte?"Fertig 🏁":"Nächste Aufgabe ➡️"}</button>`;
-}
-function zoWeiter(){
-  if(zoIdx<ZUORDNUNGEN.length-1){zoIdx++;startZuordnung();}
-  else{konfettiGross();
-    ansicht.innerHTML=`<div class="ergebnis"><div class="gross">🏆</div><div class="punkte">Alles richtig zugeordnet!</div>
-      <div class="lob">Klasse!</div>
-      <div class="knopf-reihe"><button class="mini-knopf" onclick="zeigeZuordnung()">🔁 Nochmal</button>
-      <button class="mini-knopf" onclick="startseite()">🏠 Start</button></div></div>`;}
-}
+  else{btn.classList.add("falsch");btn.disabled=true;tonFalsch();rumpeln([40,40]);}}
+function zoFertig(){const rueck=$("#rueckZ");const letzte=zoIdx===ZUORDNUNGEN.length-1;flash("gut");sprich("Alles richtig zugeordnet!");
+  rueck.className="rueckmeldung gut zeigen";rueck.innerHTML=`✅ <b>Alles zugeordnet!</b><button class="weiter-knopf" onclick="zoWeiter()">${letzte?"Fertig 🏁":"Nächste Aufgabe ➡️"}</button>`;}
+function zoWeiter(){if(zoIdx<ZUORDNUNGEN.length-1){zoIdx++;startZuordnung();}
+  else{konfettiGross();setView(`<div class="ergebnis"><div class="gross">🏆</div><div class="punkte">Alles richtig zugeordnet!</div><div class="lob">Klasse!</div>
+    <div class="knopf-reihe"><button class="mini-knopf" onclick="zeigeZuordnung()">🔁 Nochmal</button><button class="mini-knopf" onclick="startseite()">🏠 Start</button></div></div>`);}}
 
-/* =========================================================
-   SCHMIEDE (Klingen kaufen/sammeln)
-   ========================================================= */
-function zeigeSchmiede(){
-  let h=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
-    <h2>⚒️ Deine Schmiede</h2>
-    <p style="text-align:center;color:var(--grau);font-size:.92rem">Sammle <b style="color:var(--gold-hell)">🪙 Taler</b> beim Lernen und schmiede dir Klingen! (${S.blades.length}/${KLINGEN.length})</p>
-    <div class="schmiede-grid">`;
-  KLINGEN.forEach(k=>{
-    const hat=S.blades.includes(k.id);const kannZahlen=S.taler>=k.preis;
-    h+=`<div class="klinge-karte ${hat?'besitz':''}">
-      ${hat?'<span class="besitz-haken">✓</span>':''}
-      <div class="kemo">${k.emo}</div>
-      <div class="kname">${k.name}</div>`;
+/* ===================== SCHMIEDE ===================== */
+function zeigeSchmiede(){let h=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button><h2>⚒️ Deine Schmiede</h2>
+  <p style="text-align:center;color:var(--grau);font-size:.92rem">Sammle 🪙 Taler beim Lernen und schmiede dir Klingen! (${S.blades.length}/${KLINGEN.length})</p>
+  <div class="schmiede-grid">`;
+  KLINGEN.forEach(k=>{const hat=S.blades.includes(k.id),kannZahlen=S.taler>=k.preis;
+    h+=`<div class="klinge-karte ${hat?'besitz':''}">${hat?'<span class="besitz-haken">✓</span>':''}<div class="kemo">${k.emo}</div><div class="kname">${k.name}</div>`;
     if(hat)h+=`<div class="kpreis">✅ Geschmiedet</div>`;
-    else h+=`<div class="kpreis">🪙 ${k.preis}</div>
-      <button class="schmied-knopf" onclick="schmiede('${k.id}',this,event)" ${kannZahlen?'':'disabled'}>${kannZahlen?'🔨 Schmieden':'zu teuer'}</button>`;
-    h+=`</div>`;
-  });
-  h+=`</div>`;
-  ansicht.innerHTML=h;window.scrollTo(0,0);
-}
-function schmiede(id,btn,ev){
-  const k=KLINGEN.find(x=>x.id===id);
-  if(S.taler<k.preis||S.blades.includes(id))return;
-  S.taler-=k.preis;S.blades.push(id);save();
-  tonSchmied();
-  const p=mittelpunkt(btn);
-  spark(p.x,p.y,["🔨","✨","🔥","⭐"]);
-  floatText(p.x,p.y-20,k.emo+" geschmiedet!","#ffd65a");
-  hudUpdate();pruefeAbzeichen();
-  // Hammer-Animation: kurzer Screen-Hint
-  setTimeout(()=>zeigeSchmiede(),350);
-}
+    else h+=`<div class="kpreis">🪙 ${k.preis}</div><button class="schmied-knopf" onclick="schmiede('${k.id}',this)" ${kannZahlen?'':'disabled'}>${kannZahlen?'🔨 Schmieden':'zu teuer'}</button>`;
+    h+=`</div>`;});
+  h+=`</div>`;setView(h);sprich("Willkommen in deiner Schmiede! Hier kannst du Klingen schmieden.");}
+function schmiede(id,btn){const k=KLINGEN.find(x=>x.id===id);if(S.taler<k.preis||S.blades.includes(id))return;
+  S.taler-=k.preis;S.blades.push(id);save();tonSchmied();rumpeln([30,30,30]);const p=mittelpunkt(btn);
+  spark(p.x,p.y,["🔨","✨","🔥","⭐"]);floatText(p.x,p.y-20,k.emo+" geschmiedet!","#ffd65a");hudUpdate();pruefeAbzeichen();
+  sprich(k.name+" geschmiedet! Toll!");setTimeout(zeigeSchmiede,400);}
 
-/* =========================================================
-   ABZEICHEN
-   ========================================================= */
-function zeigeAbzeichen(){
-  let h=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
-    <h2>🏅 Deine Abzeichen (${S.badges.length}/${ABZEICHEN.length})</h2>
-    <div class="abz-grid">`;
+/* ===================== ABZEICHEN ===================== */
+function zeigeAbzeichen(){let h=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
+  <h2>🏅 Deine Abzeichen (${S.badges.length}/${ABZEICHEN.length})</h2><div class="abz-grid">`;
   ABZEICHEN.forEach(a=>{const auf=S.badges.includes(a.id);
-    h+=`<div class="abz ${auf?'auf':''}"><div class="aemo">${auf?a.emo:'🔒'}</div>
-      <div class="aname">${a.name}</div><div class="ainfo">${a.info}</div></div>`;});
-  h+=`</div>`;
-  ansicht.innerHTML=h;window.scrollTo(0,0);
-}
+    h+=`<div class="abz ${auf?'auf':''}"><div class="aemo">${auf?a.emo:'🔒'}</div><div class="aname">${a.name}</div><div class="ainfo">${a.info}</div></div>`;});
+  h+=`</div>`;setView(h);sprich("Hier sind deine Abzeichen. Du hast schon "+S.badges.length+" von "+ABZEICHEN.length+".");}
 
-/* =========================================================
-   WAPPEN-WERKSTATT
-   ========================================================= */
+/* ===================== WAPPEN ===================== */
 const WAPPEN_INFO={
-  krone:{t:"👑 Die Mauerkrone (5 Türme)",x:"Zeigt: Solingen ist eine <b>Großstadt</b> mit über <b>100.000 Einwohnern</b>. Viele glauben auch: 5 Türme = die 5 Städte."},
-  anker:{t:"⚓ Der Anker",x:"Erinnert an den Schutzheiligen <b>Sankt Clemens</b> – an einen Anker gekettet und ins <b>Meer</b> geworfen."},
-  schwerter:{t:"⚔️ Die zwei Schwerter",x:"Das <b>Wahrzeichen der Solinger Industrie</b> – das Schmieden von Klingen. Darum: <b>Klingenstadt</b>!"},
-  grund:{t:"🔵 Der blaue Grund",x:"Das Wappen hat einen <b>blauen</b> Hintergrund. Anker und Schwerter sind <b>golden</b> bzw. silbern."},
+  krone:{t:"👑 Die Mauerkrone (5 Türme)",x:"Zeigt: Solingen ist eine Großstadt mit über 100.000 Einwohnern. Viele glauben auch: 5 Türme bedeuten die 5 Städte."},
+  anker:{t:"⚓ Der Anker",x:"Erinnert an den Schutzheiligen Sankt Clemens. Er wurde an einen Anker gekettet und ins Meer geworfen."},
+  schwerter:{t:"⚔️ Die zwei Schwerter",x:"Das Wahrzeichen der Solinger Industrie, das Schmieden von Klingen. Darum: Klingenstadt!"},
+  grund:{t:"🔵 Der blaue Grund",x:"Das Wappen hat einen blauen Hintergrund. Anker und Schwerter sind golden und silbern."},
 };
-function zeigeWappen(){
-  ansicht.innerHTML=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
-    <h2>🛡️ Wappen-Werkstatt</h2>
-    <p style="text-align:center;color:var(--grau);font-size:.92rem">Tippe die 4 Teile an – für jedes neue Teil gibt es Funken! 🔥</p>
-    <svg class="wappen-svg" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
-      <g class="wappen-teil" onclick="wappenKlick('krone',event)">
-        <rect x="40" y="8" width="120" height="22" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
-        <rect x="44" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
-        <rect x="66" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
-        <rect x="88" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
-        <rect x="110" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
-        <rect x="132" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/></g>
-      <path class="wappen-teil" onclick="wappenKlick('grund',event)" d="M40 36 H160 V150 Q160 210 100 238 Q40 210 40 150 Z" fill="#1f63b8" stroke="#15407a" stroke-width="3"/>
-      <g class="wappen-teil" onclick="wappenKlick('anker',event)" stroke="#f5b212" stroke-width="6" fill="none" stroke-linecap="round">
-        <circle cx="100" cy="62" r="8" fill="#f5b212" stroke="none"/>
-        <line x1="100" y1="70" x2="100" y2="180"/><line x1="78" y1="92" x2="122" y2="92"/>
-        <path d="M62 150 Q62 185 100 185 Q138 185 138 150"/>
-        <path d="M62 150 l-8 -14 M62 150 l14 -6"/><path d="M138 150 l8 -14 M138 150 l-14 -6"/></g>
-      <g class="wappen-teil" onclick="wappenKlick('schwerter',event)" stroke="#e9eef5" stroke-width="6" stroke-linecap="round">
-        <line x1="58" y1="78" x2="150" y2="170"/><line x1="142" y1="78" x2="50" y2="170"/>
-        <line x1="48" y1="86" x2="70" y2="86" stroke="#f5b212"/><line x1="130" y1="86" x2="152" y2="86" stroke="#f5b212"/></g>
-    </svg>
-    <div class="tipp-zeile">👆 Krone · Anker · Schwerter · blauer Grund</div>
-    <div class="wappen-info" id="wappenInfo"><b>Willkommen in der Wappen-Werkstatt!</b>Tippe einen Teil des Wappens an. 🔎</div>`;
-  window.scrollTo(0,0);
-}
-function wappenKlick(teil,ev){
-  const info=WAPPEN_INFO[teil];
-  $("#wappenInfo").innerHTML=`<b>${info.t}</b>${info.x}`;
-  if(!S.wappen.includes(teil)){
-    S.wappen.push(teil);save();
+function zeigeWappen(){setView(`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button><h2>🛡️ Wappen-Werkstatt</h2>
+  <p style="text-align:center;color:var(--grau);font-size:.92rem">Tippe die 4 Teile an, für jedes neue gibt es Funken! 🔥</p>
+  <svg class="wappen-svg" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
+    <g class="wappen-teil" onclick="wappenKlick('krone',event)">
+      <rect x="40" y="8" width="120" height="22" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+      <rect x="44" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+      <rect x="66" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+      <rect x="88" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+      <rect x="110" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+      <rect x="132" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/></g>
+    <path class="wappen-teil" onclick="wappenKlick('grund',event)" d="M40 36 H160 V150 Q160 210 100 238 Q40 210 40 150 Z" fill="#1f63b8" stroke="#15407a" stroke-width="3"/>
+    <g class="wappen-teil" onclick="wappenKlick('anker',event)" stroke="#f5b212" stroke-width="6" fill="none" stroke-linecap="round">
+      <circle cx="100" cy="62" r="8" fill="#f5b212" stroke="none"/><line x1="100" y1="70" x2="100" y2="180"/><line x1="78" y1="92" x2="122" y2="92"/>
+      <path d="M62 150 Q62 185 100 185 Q138 185 138 150"/><path d="M62 150 l-8 -14 M62 150 l14 -6"/><path d="M138 150 l8 -14 M138 150 l-14 -6"/></g>
+    <g class="wappen-teil" onclick="wappenKlick('schwerter',event)" stroke="#e9eef5" stroke-width="6" stroke-linecap="round">
+      <line x1="58" y1="78" x2="150" y2="170"/><line x1="142" y1="78" x2="50" y2="170"/>
+      <line x1="48" y1="86" x2="70" y2="86" stroke="#f5b212"/><line x1="130" y1="86" x2="152" y2="86" stroke="#f5b212"/></g></svg>
+  <div class="tipp-zeile">👆 Krone · Anker · Schwerter · blauer Grund</div>
+  <div class="wappen-info" id="wappenInfo"><b>Willkommen in der Wappen-Werkstatt!</b>Tippe einen Teil des Wappens an. 🔎</div>`);
+  sprich("Willkommen in der Wappen-Werkstatt! Tippe auf einen Teil des Wappens.");}
+function wappenKlick(teil,ev){const info=WAPPEN_INFO[teil];$("#wappenInfo").innerHTML=`<b>${info.t}</b>${info.x}`;
+  sprich(info.t+". "+info.x);
+  if(!S.wappen.includes(teil)){S.wappen.push(teil);save();
     if(ev){const x=ev.clientX||window.innerWidth/2,y=ev.clientY||200;spark(x,y);floatText(x,y-20,"+10 🔥","#ff9a3c");}
     belohnung(10,4,null);
-    if(S.wappen.length>=4){konfettiGross();pruefeAbzeichen();
-      setTimeout(()=>{const el=$("#wappenInfo");if(el)el.innerHTML+=`<div class="merk" style="margin-top:8px">🏆 Alle 4 Teile entdeckt! Abzeichen verdient ⭐</div>`;},200);}
-  }
-}
+    if(S.wappen.length>=4){konfettiGross();pruefeAbzeichen();setTimeout(()=>{const el=$("#wappenInfo");if(el)el.innerHTML+=`<div class="merk" style="margin-top:8px">🏆 Alle 4 Teile entdeckt! Abzeichen verdient ⭐</div>`;},200);}}}
 
-/* =========================================================
-   GLUT-HINTERGRUND erzeugen
-   ========================================================= */
-(function embers(){
-  const c=$("#embers");
-  for(let i=0;i<14;i++){
-    const e=document.createElement("div");e.className="ember";
-    e.style.left=Math.random()*100+"vw";
-    e.style.animationDuration=(6+Math.random()*8)+"s";
-    e.style.animationDelay=(Math.random()*8)+"s";
-    const s=3+Math.random()*5;e.style.width=s+"px";e.style.height=s+"px";
-    e.style.background=Math.random()>.5?"#ff7a18":"#f5b212";
-    c.appendChild(e);
-  }
-})();
+/* ===================== GLUT-HINTERGRUND ===================== */
+(function embers(){const c=$("#embers");for(let i=0;i<14;i++){const e=document.createElement("div");e.className="ember";
+  e.style.left=Math.random()*100+"vw";e.style.animationDuration=(6+Math.random()*8)+"s";e.style.animationDelay=(Math.random()*8)+"s";
+  const s=3+Math.random()*5;e.style.width=s+"px";e.style.height=s+"px";e.style.background=Math.random()>.5?"#ff7a18":"#f5b212";c.appendChild(e);}})();
 
-/* Start */
-hudUpdate();
-startseite();
+/* ===================== START ===================== */
+hudUpdate();startseite(false);
+/* Begrüßung beim ersten Tippen (mobile TTS braucht eine Nutzeraktion) */
+let begruesst=false;
+document.addEventListener("pointerdown",function ein(){if(begruesst)return;begruesst=true;
+  try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();}catch(e){}
+  setTimeout(()=>sprich("Hallo! Ich bin Schmiedemeister Klingo. Los geht's!"),60);
+  document.removeEventListener("pointerdown",ein);},{once:false});
 </script>
 </body>
 </html>
