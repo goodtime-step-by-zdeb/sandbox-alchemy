@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mein Solingen-Lernbuch ⚔️⚓</title>
+<style>
+  :root{
+    --blau:#1f63b8;        /* Solinger Blau */
+    --blau-dunkel:#15407a;
+    --gold:#f5b212;        /* Solinger Gold */
+    --gold-hell:#ffd65a;
+    --gruen:#3fae5a;
+    --rot:#e1564b;
+    --bg:#eef4fb;
+    --karte:#ffffff;
+    --text:#1d2b3a;
+    --grau:#7d8a99;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.45;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:14px 14px 80px;}
+
+  /* Kopfzeile */
+  header{
+    background:linear-gradient(135deg,var(--blau),var(--blau-dunkel));
+    color:#fff;border-radius:0 0 26px 26px;
+    padding:16px 16px 18px;text-align:center;
+    box-shadow:0 6px 18px rgba(21,64,122,.35);
+    position:relative;
+  }
+  header h1{margin:0;font-size:1.5rem;letter-spacing:.5px;}
+  header .unter{font-size:.92rem;opacity:.95;margin-top:2px;}
+  .sterne-leiste{
+    display:inline-flex;align-items:center;gap:6px;margin-top:10px;
+    background:rgba(255,255,255,.16);padding:5px 14px;border-radius:30px;
+    font-weight:bold;font-size:1rem;
+  }
+  .wappen-mini{font-size:1.4rem;}
+
+  h2{font-size:1.25rem;margin:6px 2px 12px;color:var(--blau-dunkel);}
+  .zurueck{
+    display:inline-flex;align-items:center;gap:6px;border:none;
+    background:#fff;color:var(--blau-dunkel);font-weight:bold;cursor:pointer;
+    padding:9px 16px;border-radius:30px;font-size:.95rem;margin:14px 0 6px;
+    box-shadow:0 2px 6px rgba(0,0,0,.12);font-family:inherit;
+  }
+  .zurueck:active{transform:scale(.96);}
+
+  /* Kachel-Menü */
+  .gitter{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+  .kachel{
+    background:var(--karte);border:none;border-radius:20px;padding:16px 12px;
+    text-align:center;cursor:pointer;box-shadow:0 4px 12px rgba(31,99,184,.12);
+    font-family:inherit;color:var(--text);transition:transform .12s;
+    display:flex;flex-direction:column;align-items:center;gap:6px;min-height:120px;
+    justify-content:center;border-top:5px solid var(--gold);
+  }
+  .kachel:active{transform:translateY(2px) scale(.98);}
+  .kachel .emo{font-size:2.2rem;line-height:1;}
+  .kachel .titel{font-weight:bold;font-size:1rem;}
+  .kachel .mini{font-size:.74rem;color:var(--grau);}
+  .kachel .fortschritt{font-size:.72rem;color:var(--gruen);font-weight:bold;}
+
+  .modus-reihe{display:flex;flex-direction:column;gap:12px;margin-top:8px;}
+  .modus-knopf{
+    background:var(--karte);border:none;border-radius:18px;padding:16px;
+    display:flex;align-items:center;gap:14px;cursor:pointer;font-family:inherit;
+    box-shadow:0 4px 12px rgba(31,99,184,.12);text-align:left;color:var(--text);
+    border-left:6px solid var(--blau);
+  }
+  .modus-knopf:active{transform:scale(.99);}
+  .modus-knopf .emo{font-size:2rem;}
+  .modus-knopf .txt b{font-size:1.06rem;}
+  .modus-knopf .txt span{font-size:.82rem;color:var(--grau);display:block;}
+
+  /* Karteikarten */
+  .karte-flip{
+    perspective:1200px;margin:18px 0;height:340px;cursor:pointer;
+  }
+  .karte-innen{
+    position:relative;width:100%;height:100%;transition:transform .55s;
+    transform-style:preserve-3d;
+  }
+  .karte-flip.gedreht .karte-innen{transform:rotateY(180deg);}
+  .karte-seite{
+    position:absolute;width:100%;height:100%;backface-visibility:hidden;
+    border-radius:22px;padding:22px;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;
+    box-shadow:0 6px 18px rgba(0,0,0,.14);
+  }
+  .karte-vorne{background:linear-gradient(150deg,var(--blau),var(--blau-dunkel));color:#fff;}
+  .karte-hinten{background:linear-gradient(150deg,var(--gold-hell),var(--gold));color:#3a2a00;transform:rotateY(180deg);}
+  .karte-seite .frage{font-size:1.3rem;font-weight:bold;}
+  .karte-seite .antwort{font-size:1.12rem;}
+  .karte-seite .label{font-size:.78rem;text-transform:uppercase;letter-spacing:1px;opacity:.8;margin-bottom:10px;}
+  .karte-seite .tipp{font-size:.85rem;margin-top:14px;opacity:.85;}
+  .karten-nav{display:flex;justify-content:space-between;align-items:center;gap:10px;}
+  .nav-knopf{
+    background:var(--blau);color:#fff;border:none;border-radius:30px;
+    padding:12px 20px;font-size:1rem;font-weight:bold;cursor:pointer;font-family:inherit;
+    box-shadow:0 3px 8px rgba(31,99,184,.3);
+  }
+  .nav-knopf:disabled{background:#b9c6d6;box-shadow:none;}
+  .nav-knopf:active:not(:disabled){transform:scale(.95);}
+  .zaehler{font-weight:bold;color:var(--blau-dunkel);}
+
+  /* Quiz */
+  .quiz-frage{
+    background:var(--karte);border-radius:20px;padding:20px;margin:16px 0;
+    box-shadow:0 4px 12px rgba(31,99,184,.12);border-top:5px solid var(--blau);
+  }
+  .quiz-frage .nr{font-size:.8rem;color:var(--grau);font-weight:bold;}
+  .quiz-frage .text{font-size:1.18rem;font-weight:bold;margin:6px 0 4px;}
+  .quiz-frage .thema{font-size:.74rem;color:var(--gold);font-weight:bold;text-transform:uppercase;}
+  .antworten{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+  .antwort-knopf{
+    background:#f3f7fc;border:2px solid #dce6f2;border-radius:14px;padding:14px;
+    font-size:1.02rem;cursor:pointer;font-family:inherit;text-align:left;color:var(--text);
+    transition:transform .1s;
+  }
+  .antwort-knopf:active{transform:scale(.99);}
+  .antwort-knopf.richtig{background:#dff5e4;border-color:var(--gruen);font-weight:bold;}
+  .antwort-knopf.falsch{background:#fbe2e0;border-color:var(--rot);}
+  .antwort-knopf:disabled{cursor:default;}
+  .rueckmeldung{
+    margin-top:14px;padding:14px;border-radius:14px;font-size:.98rem;display:none;
+  }
+  .rueckmeldung.zeigen{display:block;}
+  .rueckmeldung.gut{background:#dff5e4;border-left:5px solid var(--gruen);}
+  .rueckmeldung.schlecht{background:#fbe2e0;border-left:5px solid var(--rot);}
+  .rueckmeldung b{color:var(--blau-dunkel);}
+  .weiter-knopf{
+    background:var(--gruen);color:#fff;border:none;border-radius:30px;width:100%;
+    padding:15px;font-size:1.1rem;font-weight:bold;cursor:pointer;font-family:inherit;
+    margin-top:14px;box-shadow:0 3px 8px rgba(63,174,90,.35);
+  }
+  .weiter-knopf:active{transform:scale(.98);}
+
+  /* Lückentext */
+  .luecke-satz{font-size:1.18rem;line-height:2.1;margin:16px 0;}
+  .luecke{
+    display:inline-block;min-width:90px;border-bottom:3px dashed var(--blau);
+    text-align:center;font-weight:bold;color:var(--blau-dunkel);padding:0 6px;
+  }
+  .luecke.gefuellt{border-bottom:3px solid var(--gruen);color:var(--gruen);}
+  .wort-wolke{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:10px;}
+  .wort-chip{
+    background:var(--gold);color:#3a2a00;border:none;border-radius:30px;
+    padding:11px 18px;font-size:1rem;font-weight:bold;cursor:pointer;font-family:inherit;
+    box-shadow:0 3px 6px rgba(245,178,18,.4);
+  }
+  .wort-chip:active{transform:scale(.95);}
+  .wort-chip.benutzt{background:#d9dee5;color:#9aa6b3;box-shadow:none;}
+
+  /* Zuordnung */
+  .zuordnung-spalten{display:grid;grid-template-columns:1fr;gap:10px;margin-top:8px;}
+  .zo-paar{display:grid;grid-template-columns:1fr;gap:6px;}
+  .zo-begriff{
+    background:var(--blau);color:#fff;border-radius:14px 14px 0 0;padding:12px;font-weight:bold;
+  }
+  .zo-optionen{display:flex;flex-wrap:wrap;gap:6px;background:#fff;border-radius:0 0 14px 14px;padding:8px;
+    box-shadow:0 3px 8px rgba(0,0,0,.08);}
+  .zo-opt{
+    border:2px solid #dce6f2;background:#f3f7fc;border-radius:10px;padding:8px 12px;
+    cursor:pointer;font-family:inherit;font-size:.9rem;
+  }
+  .zo-opt.richtig{background:#dff5e4;border-color:var(--gruen);font-weight:bold;}
+  .zo-opt.falsch{background:#fbe2e0;border-color:var(--rot);}
+  .zo-opt:disabled{cursor:default;opacity:.6;}
+
+  /* Ergebnis */
+  .ergebnis{
+    background:var(--karte);border-radius:22px;padding:26px 20px;text-align:center;
+    margin-top:20px;box-shadow:0 6px 18px rgba(31,99,184,.16);
+  }
+  .ergebnis .gross{font-size:3.4rem;}
+  .ergebnis .punkte{font-size:1.4rem;font-weight:bold;color:var(--blau-dunkel);margin:8px 0;}
+  .ergebnis .lob{font-size:1.05rem;color:var(--gruen);font-weight:bold;}
+  .ergebnis .urkunde{font-size:.92rem;color:var(--grau);margin-top:6px;}
+
+  /* Wappen-Werkstatt */
+  .wappen-svg{display:block;margin:10px auto;width:200px;height:auto;
+    filter:drop-shadow(0 4px 8px rgba(0,0,0,.2));}
+  .wappen-teil{cursor:pointer;transition:opacity .2s;}
+  .wappen-info{
+    background:var(--karte);border-radius:18px;padding:16px;margin-top:12px;
+    box-shadow:0 4px 12px rgba(31,99,184,.12);border-left:6px solid var(--gold);
+    min-height:90px;
+  }
+  .wappen-info b{color:var(--blau-dunkel);display:block;margin-bottom:4px;font-size:1.08rem;}
+  .tipp-zeile{font-size:.85rem;color:var(--grau);text-align:center;margin-top:8px;}
+  .knopf-reihe{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px;}
+  .mini-knopf{
+    background:var(--blau);color:#fff;border:none;border-radius:24px;padding:10px 14px;
+    font-family:inherit;font-size:.85rem;font-weight:bold;cursor:pointer;
+  }
+  .mini-knopf:active{transform:scale(.96);}
+
+  /* Steckbrief / Wissen */
+  .info-block{
+    background:var(--karte);border-radius:18px;padding:16px 18px;margin:12px 0;
+    box-shadow:0 4px 12px rgba(31,99,184,.1);border-top:5px solid var(--gold);
+  }
+  .info-block h3{margin:0 0 8px;color:var(--blau-dunkel);font-size:1.1rem;}
+  .info-block ul{margin:6px 0;padding-left:20px;}
+  .info-block li{margin:5px 0;}
+  .info-block .merk{background:#fff7e0;border-radius:10px;padding:8px 10px;font-size:.9rem;margin-top:8px;}
+  .badge{display:inline-block;background:var(--gold-hell);color:#3a2a00;border-radius:20px;
+    padding:2px 10px;font-size:.8rem;font-weight:bold;margin:2px;}
+
+  .fuss{text-align:center;font-size:.78rem;color:var(--grau);margin-top:24px;}
+  .konfetti{position:fixed;top:-10px;font-size:1.4rem;pointer-events:none;z-index:99;animation:fall 2.2s linear forwards;}
+  @keyframes fall{to{transform:translateY(105vh) rotate(360deg);opacity:.2;}}
+  .verstecken{display:none;}
+  .hervor{color:var(--gold);font-weight:bold;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="wappen-mini">⚓</span> Mein Solingen-Lernbuch <span class="wappen-mini">⚔️</span></h1>
+    <div class="unter">Lerne alles über die Klingenstadt!</div>
+    <div class="sterne-leiste">⭐ <span id="sterne-anzeige">0</span> Sterne gesammelt</div>
+  </header>
+
+  <div id="ansicht"></div>
+
+  <div class="fuss">Mein Solingen-Buch · Sachunterricht Klasse 3 · Viel Erfolg beim Lernen! 💪</div>
+</div>
+
+<script>
+/* =========================================================
+   DATEN – aus dem Solingen-Heft + sinnvoll ergänzte Fragen
+   ========================================================= */
+
+const THEMEN = [
+  {id:"geschichte", emo:"🏰", titel:"Geschichte der Stadt", mini:"Wie Solingen entstand"},
+  {id:"wappen",     emo:"🛡️", titel:"Das Wappen",          mini:"Anker & Schwerter"},
+  {id:"staedte",    emo:"🗺️", titel:"Die 5 Städte",        mini:"Stadtteile von Solingen"},
+  {id:"berufe",     emo:"🔨", titel:"Berufe & Klingen",    mini:"Schmied, Schleifer & Co."},
+  {id:"wasser",     emo:"💧", titel:"Bäche, Kotten, Hämmer",mini:"Wasserkraft & Sage"},
+  {id:"haeuser",    emo:"🏚️", titel:"Fachwerk & Feuer",    mini:"Häuser, Mauer, Tore"},
+];
+
+/* ---- KARTEIKARTEN (Frage / Antwort) je Thema ---- */
+const KARTEN = {
+  geschichte:[
+    {f:"Wie hieß die Gegend von Solingen bei den ersten Siedlern?", a:"„Solonchon“", t:"Daraus wurde später Solingen."},
+    {f:"Wie wurde aus dem Namen „Solonchon“ am Ende?", a:"Solonchon → Solagon → Solonchon → Solungen → Solingen", t:"Der Name veränderte sich über viele Jahre."},
+    {f:"Wann wurde Solingen zum ersten Mal erwähnt?", a:"Ungefähr im Jahr 1000", t:"Das ist über 1000 Jahre her!"},
+    {f:"An welchem Tag bekam Solingen die Stadtrechte?", a:"Am 23. Februar 1374", t:"Merke: 1374 = Solingen wird Stadt."},
+    {f:"Wie alt wurde Solingen im Jahr 1974?", a:"600 Jahre alt", t:"1374 + 600 = 1974 (Geburtstag)."},
+    {f:"Wer verlieh Solingen die Stadtrechte?", a:"Der Graf und die Gräfin von Berg", t:"Darum heißt es „Bergisches Land“."},
+    {f:"Was durften die Solinger Bürger ab 1374? (1)", a:"Einen Bürgermeister wählen", t:""},
+    {f:"Was durften die Solinger Bürger ab 1374? (2)", a:"Die Stadt mit Mauern und Toren befestigen", t:""},
+    {f:"Was durften die Solinger Bürger ab 1374? (3)", a:"Selbst Gericht abhalten", t:""},
+    {f:"Was durften die Solinger Bürger ab 1374? (4)", a:"Einen Wochenmarkt und Jahrmarkt abhalten", t:""},
+  ],
+  wappen:[
+    {f:"Was zeigt das Solinger Wappen?", a:"Einen goldenen Anker und zwei gekreuzte Schwerter auf blauem Grund", t:"Anker + Schwerter = Solingen."},
+    {f:"Wofür stehen die zwei Schwerter im Wappen?", a:"Für die Solinger Industrie – das Schmieden von Klingen", t:"Sie sind das Wahrzeichen der Industrie."},
+    {f:"Woran soll der Anker erinnern?", a:"An den Schutzheiligen Sankt Clemens", t:"Er war der Heilige der alten Pfarrkirche."},
+    {f:"Was passierte der Legende nach mit dem heiligen Clemens?", a:"Er wurde an einen Anker gekettet und ins Meer geworfen", t:"Er lebte um 100 nach Christus."},
+    {f:"Was bedeutet die Mauerkrone mit den 5 Türmen?", a:"Dass Solingen eine Großstadt mit über 100.000 Einwohnern ist", t:"5 Türme = Großstadt."},
+    {f:"Was glauben viele Solinger über die 5 Türme?", a:"Dass sie für die fünf Städte stehen, aus denen Solingen wurde", t:"Eine schöne Erklärung!"},
+    {f:"Aus welchem Jahr ist das älteste Stadtsiegel?", a:"Aus dem Jahr 1468", t:"Darauf war der heilige Clemens zu sehen."},
+    {f:"Wann schlossen sich die fünf Städte zu Solingen zusammen?", a:"Im Jahr 1929", t:"Merke: 1929 = aus 5 mach 1."},
+  ],
+  staedte:[
+    {f:"Welche fünf Städte wurden 1929 zu Groß-Solingen?", a:"Gräfrath, Höhscheid, Ohligs, Solingen und Wald", t:"Eselsbrücke: G-H-O-S-W."},
+    {f:"Seit wann gehört der Stadtteil Burg zu Solingen?", a:"Erst seit 1975", t:"Burg kam später dazu."},
+    {f:"Was zeigt das Ohligs-Wappen mit den 3 Türmen?", a:"Dass Ohligs eine Kleinstadt ist", t:"3 Türme = Kleinstadt, 5 Türme = Großstadt."},
+    {f:"Wofür stehen die Silbersterne im Ohligs-Wappen?", a:"Für die vielen Hofschaften, aus denen Ohligs entstand", t:""},
+    {f:"Wofür steht das Flügelrad im Ohligs-Wappen?", a:"Für den Eisenbahnanschluss / den Bahnhof", t:"Ohligs wurde 1891 gegründet."},
+    {f:"Wie viele Stadtbezirke hat Solingen heute?", a:"Fünf Stadtbezirke", t:""},
+  ],
+  berufe:[
+    {f:"Was machte der Schmied?", a:"Er erhitzte das Eisen, bis es glühte, und gab ihm mit Hammer und Amboss die grobe Form", t:""},
+    {f:"Was machte der Härter?", a:"Er machte das Eisen glühend heiß und tauchte es in Wasser oder Öl, damit es stabiler wurde", t:"So wurde die Klinge hart."},
+    {f:"Was machte der Schleifer und wo arbeitete er?", a:"Er gab dem Werkstück mit dem Schleifstein Glanz und Schärfe – im Kotten, mit bis zu 100 Personen", t:""},
+    {f:"Was machte der Schwertfeger?", a:"Er setzte aus Einzelteilen ein Messer, eine Schere oder ein Schwert zusammen und polierte es", t:""},
+    {f:"Was machten die Verleger?", a:"Sie hatten Büros in der Stadt, lieferten die Rohware und verkauften die fertigen Waren", t:""},
+    {f:"Was machten die Lieferfrauen?", a:"Sie brachten die Werkstücke von Ort zu Ort, z. B. vom Schmied zum Härter", t:""},
+    {f:"Welche Reihenfolge hat die Klingenherstellung?", a:"Schmied → Härter → Schleifer → Schwertfeger", t:"Erst formen, dann härten, dann schleifen, dann zusammenbauen."},
+    {f:"Was bedeutet „ME FECIT SOLINGEN“?", a:"„Mich schuf Solingen“ – das Meisterzeichen auf dem Schwert", t:""},
+    {f:"Welchen Spitznamen hat Solingen?", a:"Die „Klingenstadt“", t:"Es gibt sogar eine Klingenstraße und einen Klingenpfad."},
+    {f:"Was wird in Solingen heute vor allem hergestellt?", a:"Vor allem Messer (und Scheren)", t:"Früher auch Schwerter, Säbel und Degen."},
+    {f:"Womit machte der Köhler die Holzkohle?", a:"Aus Eichen- oder Buchenholz, das er aufschichtete, mit Erde bedeckte und langsam verglimmen ließ", t:"Kohle brauchte man zum Eisen-Schmelzen."},
+  ],
+  wasser:[
+    {f:"Welche zwei Flüsse waren für Solingen wichtig?", a:"Die Wupper und der Morsbach", t:"Sie trieben die Wasserräder an."},
+    {f:"Was geschah in den Hämmern?", a:"Wasserräder bewegten große Hämmer, die glühend heißes Eisen in Form schmiedeten", t:""},
+    {f:"Was geschah in den Schleifkotten?", a:"Mit Wasserkraft wurden Klingen rund geschliffen und scharf gemacht", t:""},
+    {f:"Woher kam früher die Kraft für Hämmer und Kotten?", a:"Aus der Wasserkraft der Bäche und Flüsse (Wasserräder)", t:"Stauteiche sammelten das Wasser."},
+    {f:"Seit wann gibt es Maschinen statt Wasserkraft?", a:"Die Dampfmaschine wurde vor etwa 250 Jahren erfunden; ab ~1850 gab es Fabriken", t:""},
+    {f:"Wovon erzählt die Sage über die Wupper?", a:"Ein Erdmännlein schenkte einer armen Frau einen Bach – daraus wurde der Fluss Wupper", t:"Die Frau wünschte sich Wasser für ihr Land."},
+    {f:"Woher kam das Eisenerz vor 700 Jahren?", a:"Aus dem Bergischen Land selbst; später aus dem Siegerland", t:"Geschmolzen wurde es in Rennöfen."},
+  ],
+  haeuser:[
+    {f:"Wie heißt die älteste Hausart in Solingen?", a:"Das Fachwerkhaus", t:""},
+    {f:"Woraus wurde das Fundament gebaut?", a:"Aus schweren Bruchsteinen", t:""},
+    {f:"Womit wurden die Gefache (Zwischenräume) gefüllt?", a:"Mit Weiden geflochten und mit Lehm verputzt", t:""},
+    {f:"Womit wurden die Eichenbalken vor Regen geschützt?", a:"Sie wurden mit Teer bestrichen", t:"Darum sind die Balken schwarz."},
+    {f:"Warum war Feuer in der alten Stadt so gefährlich?", a:"Die Fachwerkhäuser standen sehr dicht zusammen, so brannte schnell die ganze Stadt", t:""},
+    {f:"Warum bekam die Stadt eine Stadtmauer?", a:"Zum Schutz vor Feinden", t:"Solingen wurde mehrmals belagert."},
+    {f:"Nenne Solinger Stadttore.", a:"Ohliger Tor, Neutor, Amtstor, Breidbacher Tor, Bachtor", t:"Durch die Tore kam man in die Stadt."},
+  ],
+};
+
+/* ---- QUIZ (Multiple Choice) ---- */
+const QUIZ = [
+  {thema:"Geschichte", f:"Wann bekam Solingen die Stadtrechte?", o:["1374","1929","1975","1468"], r:0},
+  {thema:"Geschichte", f:"Wie hieß Solingen bei den ersten Siedlern?", o:["Solbach","Solonchon","Solwald","Klingen"], r:1},
+  {thema:"Geschichte", f:"Wie alt wurde Solingen 1974?", o:["100 Jahre","300 Jahre","600 Jahre","1000 Jahre"], r:2},
+  {thema:"Geschichte", f:"Wer verlieh die Stadtrechte?", o:["Der König von Köln","Der Graf und die Gräfin von Berg","Der Bürgermeister","Der Papst"], r:1},
+  {thema:"Geschichte", f:"Was durften die Bürger NICHT?", o:["Bürgermeister wählen","Wochenmarkt abhalten","Selbst Gericht halten","Eine Burg im Meer bauen"], r:3},
+
+  {thema:"Wappen", f:"Was zeigt das Solinger Wappen?", o:["Anker und zwei Schwerter","Ein Pferd","Drei Sterne","Eine Krone allein"], r:0},
+  {thema:"Wappen", f:"Wofür stehen die Schwerter im Wappen?", o:["Für das Meer","Für die Klingen-Industrie","Für den Wald","Für die Bauern"], r:1},
+  {thema:"Wappen", f:"Woran erinnert der Anker?", o:["An einen Hafen","An ein Schiff","An den heiligen Clemens","An die Wupper"], r:2},
+  {thema:"Wappen", f:"Was bedeutet die Mauerkrone mit 5 Türmen?", o:["5 Kirchen","Großstadt über 100.000 Einwohner","5 Flüsse","5 Burgen"], r:1},
+  {thema:"Wappen", f:"Welche Farbe hat der Hintergrund (Grund) des Wappens?", o:["Rot","Grün","Blau","Schwarz"], r:2},
+  {thema:"Wappen", f:"Aus welchem Jahr ist das älteste Stadtsiegel?", o:["1374","1468","1929","1795"], r:1},
+
+  {thema:"Die 5 Städte", f:"Welche Stadt gehört NICHT zu den fünf von 1929?", o:["Gräfrath","Höhscheid","Burg","Wald"], r:2},
+  {thema:"Die 5 Städte", f:"Wann schlossen sich die fünf Städte zusammen?", o:["1374","1891","1929","1975"], r:2},
+  {thema:"Die 5 Städte", f:"Seit wann gehört Burg zu Solingen?", o:["1929","1950","1975","2000"], r:2},
+  {thema:"Die 5 Städte", f:"Wofür steht das Flügelrad im Ohligs-Wappen?", o:["Den Bahnhof / die Eisenbahn","Eine Mühle","Den Wind","Ein Schiff"], r:0},
+  {thema:"Die 5 Städte", f:"Was zeigen die 3 Türme im Ohligs-Wappen?", o:["Großstadt","Kleinstadt","Dorf","Hauptstadt"], r:1},
+
+  {thema:"Berufe", f:"Wer gibt dem Eisen mit Hammer und Amboss die Form?", o:["Der Schleifer","Der Schmied","Der Verleger","Der Härter"], r:1},
+  {thema:"Berufe", f:"Wer macht die Klinge mit dem Schleifstein scharf?", o:["Der Schleifer","Der Schmied","Die Lieferfrau","Der Verleger"], r:0},
+  {thema:"Berufe", f:"Wer taucht das glühende Eisen in Wasser oder Öl?", o:["Der Schwertfeger","Der Härter","Der Bauer","Der Köhler"], r:1},
+  {thema:"Berufe", f:"Wer setzt am Ende Messer und Schere zusammen?", o:["Der Schmied","Der Schleifer","Der Schwertfeger","Der Härter"], r:2},
+  {thema:"Berufe", f:"Was bedeutet „ME FECIT SOLINGEN“?", o:["Solingen ist groß","Mich schuf Solingen","Aus Solingen","Solingen für immer"], r:1},
+  {thema:"Berufe", f:"Wie lautet die richtige Reihenfolge?", o:["Schleifer → Schmied → Härter","Schmied → Härter → Schleifer → Schwertfeger","Härter → Schmied → Schleifer","Schwertfeger → Schmied → Schleifer"], r:1},
+  {thema:"Berufe", f:"Welchen Spitznamen hat Solingen?", o:["Wasserstadt","Klingenstadt","Burgstadt","Goldstadt"], r:1},
+  {thema:"Berufe", f:"Wer stellte aus Holz die Holzkohle her?", o:["Der Köhler","Der Schmied","Der Bauer","Der Verleger"], r:0},
+
+  {thema:"Wasser", f:"Welcher Fluss trieb die Wasserräder an?", o:["Der Rhein","Die Wupper","Die Donau","Die Elbe"], r:1},
+  {thema:"Wasser", f:"Wo arbeiteten bis zu 100 Schleifer zusammen?", o:["Im Hammer","Im Kotten","Im Büro","Auf dem Feld"], r:1},
+  {thema:"Wasser", f:"Was bewegten die Wasserräder in den Hämmern?", o:["Große Hämmer","Autos","Mühlsteine zum Brotbacken","Boote"], r:0},
+  {thema:"Wasser", f:"Wer schenkte der armen Frau in der Sage einen Bach?", o:["Ein König","Ein Erdmännlein","Ein Ritter","Ein Schmied"], r:1},
+  {thema:"Wasser", f:"Woher kam später das Eisenerz?", o:["Aus dem Siegerland","Aus dem Meer","Aus Köln","Aus dem Wald"], r:0},
+
+  {thema:"Fachwerk & Feuer", f:"Wie heißt die älteste Hausart?", o:["Das Steinhaus","Das Fachwerkhaus","Das Hochhaus","Das Holzschiff"], r:1},
+  {thema:"Fachwerk & Feuer", f:"Warum brannte früher schnell die ganze Stadt?", o:["Die Häuser standen dicht zusammen","Es gab keine Feuerwehr-Autos","Es war immer heiß","Die Mauer war aus Holz"], r:0},
+  {thema:"Fachwerk & Feuer", f:"Womit wurden die Balken vor Regen geschützt?", o:["Mit Farbe","Mit Teer","Mit Wasser","Mit Gold"], r:1},
+  {thema:"Fachwerk & Feuer", f:"Wozu bekam die Stadt eine Stadtmauer?", o:["Zum Schutz vor Feinden","Als Schmuck","Gegen Regen","Für den Markt"], r:0},
+];
+
+/* ---- LÜCKENTEXT (Sätze aus dem Heft) ---- */
+const LUECKEN = [
+  {teile:["Das Solinger Wappen zeigt einen goldenen ","ANKER"," und zwei gekreuzte ","SCHWERTER","."], woerter:["ANKER","SCHWERTER","MEER","BURG"]},
+  {teile:["Die Mauerkrone mit den 5 ","TÜRMEN"," zeigt, dass Solingen eine ","GROSSSTADT"," ist."], woerter:["TÜRMEN","GROSSSTADT","DORF","KIRCHE"]},
+  {teile:["Solingen bekam im Jahr ","1374"," die Stadtrechte und wurde ","STADT","."], woerter:["1374","STADT","MEER","WALD"]},
+  {teile:["Im Jahr ","1929"," wurden fünf Städte zur Großstadt Solingen ","VEREINIGT","."], woerter:["1929","VEREINIGT","1975","GETRENNT"]},
+  {teile:["Der ","SCHMIED"," erhitzte das Eisen und gab ihm mit Hammer und ","AMBOSS"," die Form."], woerter:["SCHMIED","AMBOSS","KOTTEN","SCHLEIFER"]},
+  {teile:["Der ","SCHLEIFER"," gab dem Werkstück mit dem ","SCHLEIFSTEIN"," Glanz und Schärfe."], woerter:["SCHLEIFER","SCHLEIFSTEIN","ANKER","BÜRO"]},
+  {teile:["„ME FECIT SOLINGEN“ heißt: Mich ","SCHUF"," Solingen. Solingen ist die ","KLINGENSTADT","."], woerter:["SCHUF","KLINGENSTADT","MEER","BURG"]},
+  {teile:["Die Flüsse ","WUPPER"," und Morsbach trieben mit ","WASSERKRAFT"," die Räder an."], woerter:["WUPPER","WASSERKRAFT","NORDSEE","WIND"]},
+  {teile:["Die älteste Hausart ist das ","FACHWERKHAUS",". Die Balken wurden mit ","TEER"," bestrichen."], woerter:["FACHWERKHAUS","TEER","HOCHHAUS","GOLD"]},
+  {teile:["Der Stadtteil ","BURG"," gehört erst seit dem Jahr ","1975"," zu Solingen."], woerter:["BURG","1975","OHLIGS","1374"]},
+];
+
+/* ---- ZUORDNUNG ---- */
+const ZUORDNUNGEN = [
+  {titel:"Welcher Beruf macht was?",
+   paare:[
+    {begriff:"🔨 Schmied", richtig:"gibt dem Eisen die Form", optionen:["gibt dem Eisen die Form","macht es scharf","bringt Ware von Ort zu Ort"]},
+    {begriff:"💪 Härter", richtig:"taucht Eisen in Wasser/Öl", optionen:["taucht Eisen in Wasser/Öl","verkauft im Büro","pflügt das Feld"]},
+    {begriff:"✨ Schleifer", richtig:"macht die Klinge scharf", optionen:["macht die Klinge scharf","schmilzt Holzkohle","baut Häuser"]},
+    {begriff:"🔧 Schwertfeger", richtig:"setzt alles zusammen", optionen:["setzt alles zusammen","wählt den Bürgermeister","macht Holzkohle"]},
+   ]},
+  {titel:"Was bedeuten die Wappen-Teile?",
+   paare:[
+    {begriff:"⚓ Anker", richtig:"der heilige Clemens", optionen:["der heilige Clemens","die Industrie","der Bahnhof"]},
+    {begriff:"⚔️ Schwerter", richtig:"die Klingen-Industrie", optionen:["die Klingen-Industrie","das Meer","der Wald"]},
+    {begriff:"👑 5 Türme", richtig:"Großstadt über 100.000", optionen:["Großstadt über 100.000","ein Dorf","fünf Kirchen"]},
+    {begriff:"🔵 Blauer Grund", richtig:"die Farbe des Wappens", optionen:["die Farbe des Wappens","der Himmel über Burg","ein See"]},
+   ]},
+  {titel:"Welches Jahr passt?",
+   paare:[
+    {begriff:"📜 Stadtrechte", richtig:"1374", optionen:["1374","1929","1975"]},
+    {begriff:"🤝 Fünf Städte vereint", richtig:"1929", optionen:["1929","1374","1468"]},
+    {begriff:"🏘️ Burg kommt dazu", richtig:"1975", optionen:["1975","1891","1374"]},
+    {begriff:"🚂 Ohligs gegründet", richtig:"1891", optionen:["1891","1929","1975"]},
+   ]},
+];
+
+/* ---- WISSEN / STECKBRIEF ---- */
+const WISSEN = {
+  geschichte:`
+    <div class="info-block">
+      <h3>📜 Wie Solingen entstand</h3>
+      <ul>
+        <li>Früher war hier dichter <b>Wald</b>. Die ersten Siedler mussten ihn roden.</li>
+        <li>Die Gegend hieß <b>„Solonchon“</b>. Daraus wurde nach und nach: Solonchon → Solagon → Solonchon → Solungen → <b>Solingen</b>.</li>
+        <li>Um das Jahr <b>1000</b> wurde Solingen zum ersten Mal erwähnt.</li>
+        <li>Am <b>23. Februar 1374</b> bekam Solingen vom <b>Grafen und der Gräfin von Berg</b> die <b>Stadtrechte</b>.</li>
+        <li>1974 feierte Solingen seinen <b>600. Geburtstag</b>.</li>
+      </ul>
+      <div class="merk">⭐ <b>Merke:</b> Die Bürger durften nun: einen Bürgermeister <b>wählen</b>, die Stadt mit <b>Mauern und Toren</b> befestigen, selbst <b>Gericht</b> halten und einen <b>Wochenmarkt und Jahrmarkt</b> abhalten.</div>
+    </div>`,
+  wappen:`
+    <div class="info-block">
+      <h3>🛡️ Das Solinger Wappen</h3>
+      <ul>
+        <li>Auf <b>blauem Grund</b>: ein goldener <b>Anker</b> und zwei gekreuzte <b>Schwerter</b> mit goldenen Griffen.</li>
+        <li>Die <b>Schwerter</b> = Wahrzeichen der Solinger <b>Industrie</b> (Klingen-Schmieden).</li>
+        <li>Der <b>Anker</b> erinnert an den Schutzheiligen <b>Sankt Clemens</b>. Der Legende nach wurde er an einen Anker gekettet und ins <b>Meer</b> geworfen (um 100 n. Chr.).</li>
+        <li>Die <b>Mauerkrone</b> mit <b>5 Türmen</b> = Solingen ist eine <b>Großstadt</b> mit über <b>100.000</b> Einwohnern.</li>
+        <li>Viele glauben: Die 5 Türme stehen für die <b>fünf Städte</b>.</li>
+      </ul>
+      <div class="merk">⭐ <b>Merke:</b> Ältestes Stadtsiegel = <b>1468</b>. Die fünf Städte vereinten sich <b>1929</b>.</div>
+    </div>`,
+  staedte:`
+    <div class="info-block">
+      <h3>🗺️ Die fünf Städte (1929)</h3>
+      <p>Eselsbrücke: <span class="badge">G</span><span class="badge">H</span><span class="badge">O</span><span class="badge">S</span><span class="badge">W</span></p>
+      <ul>
+        <li><b>G</b>räfrath</li><li><b>H</b>öhscheid</li><li><b>O</b>hligs</li>
+        <li><b>S</b>olingen</li><li><b>W</b>ald</li>
+      </ul>
+      <div class="merk">🏘️ Der Stadtteil <b>Burg</b> kam erst <b>1975</b> dazu.</div>
+    </div>
+    <div class="info-block">
+      <h3>🚂 Ohligs und sein Wappen</h3>
+      <ul>
+        <li>Ohligs wurde <b>1891</b> gegründet.</li>
+        <li>Die <b>3 Türme</b> zeigen: Ohligs ist eine <b>Kleinstadt</b>.</li>
+        <li>Die <b>Silbersterne</b> = die vielen <b>Hofschaften</b>.</li>
+        <li>Das <b>Flügelrad</b> = der <b>Eisenbahnanschluss</b> (Bahnhof).</li>
+      </ul>
+    </div>`,
+  berufe:`
+    <div class="info-block">
+      <h3>🔨 Die Berufe der Klingen-Herstellung</h3>
+      <p>Reihenfolge: <b>Schmied → Härter → Schleifer → Schwertfeger</b></p>
+      <ul>
+        <li><b>Schmied:</b> erhitzt Eisen, formt es mit Hammer und Amboss.</li>
+        <li><b>Härter:</b> macht das Eisen glühend heiß und taucht es in Wasser/Öl → es wird hart.</li>
+        <li><b>Schleifer:</b> gibt der Klinge mit dem Schleifstein Glanz und Schärfe (im <b>Kotten</b>).</li>
+        <li><b>Schwertfeger:</b> setzt aus Einzelteilen Messer, Schere oder Schwert zusammen und poliert.</li>
+        <li><b>Verleger:</b> hat ein Büro, liefert Rohware und verkauft die fertigen Waren.</li>
+        <li><b>Lieferfrauen:</b> bringen Werkstücke von Ort zu Ort.</li>
+        <li><b>Köhler:</b> macht aus Holz die Holzkohle zum Schmelzen.</li>
+      </ul>
+      <div class="merk">⚔️ <b>ME FECIT SOLINGEN</b> = „Mich schuf Solingen“. Solingen = die <b>Klingenstadt</b>. Heute vor allem <b>Messer</b>.</div>
+    </div>`,
+  wasser:`
+    <div class="info-block">
+      <h3>💧 Bäche, Kotten und Hämmer</h3>
+      <ul>
+        <li>Die Flüsse <b>Wupper</b> und <b>Morsbach</b> trieben mit <b>Wasserkraft</b> die Räder an.</li>
+        <li><b>Hämmer:</b> Wasserräder bewegten große Hämmer, die heißes Eisen schmiedeten.</li>
+        <li><b>Schleifkotten:</b> Hier wurden Klingen geschliffen und scharf gemacht.</li>
+        <li>Vor 700 Jahren gab es viel <b>Eisenerz</b> im Bergischen Land. Es wurde in <b>Rennöfen</b> geschmolzen. Später kam das Erz aus dem <b>Siegerland</b>.</li>
+      </ul>
+      <div class="merk">🧙 <b>Sage:</b> Ein <b>Erdmännlein</b> schenkte einer armen Frau einen Bach – daraus wurde die <b>Wupper</b>.</div>
+    </div>`,
+  haeuser:`
+    <div class="info-block">
+      <h3>🏚️ Fachwerkhäuser</h3>
+      <ul>
+        <li>Die älteste Hausart ist das <b>Fachwerkhaus</b>.</li>
+        <li>Fundament aus schweren <b>Bruchsteinen</b>.</li>
+        <li>Die Gefache wurden mit <b>Weiden</b> geflochten und mit <b>Lehm</b> verputzt.</li>
+        <li>Die <b>Eichenbalken</b> wurden mit <b>Teer</b> bestrichen (darum schwarz).</li>
+      </ul>
+    </div>
+    <div class="info-block">
+      <h3>🔥 Feinde und Feuer</h3>
+      <ul>
+        <li>Die Stadt bekam eine <b>Stadtmauer</b> zum Schutz vor Feinden.</li>
+        <li>Tore: <b>Ohliger Tor, Neutor, Amtstor, Breidbacher Tor, Bachtor</b>.</li>
+        <li>Die Häuser standen <b>dicht</b> zusammen → ein Feuer konnte die ganze Stadt vernichten.</li>
+      </ul>
+    </div>`,
+};
+
+/* =========================================================
+   ZUSTAND
+   ========================================================= */
+let sterne = parseInt(localStorage.getItem("solingen_sterne")||"0",10);
+const $ = sel => document.querySelector(sel);
+const ansicht = $("#ansicht");
+
+function sterneSpeichern(plus){
+  sterne += plus;
+  localStorage.setItem("solingen_sterne", sterne);
+  $("#sterne-anzeige").textContent = sterne;
+}
+$("#sterne-anzeige").textContent = sterne;
+
+function konfetti(){
+  const emojis=["⭐","🎉","⚔️","⚓","🏆","✨"];
+  for(let i=0;i<18;i++){
+    const k=document.createElement("div");
+    k.className="konfetti";
+    k.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    k.style.left=Math.random()*100+"vw";
+    k.style.animationDelay=(Math.random()*0.5)+"s";
+    document.body.appendChild(k);
+    setTimeout(()=>k.remove(),2600);
+  }
+}
+function mischen(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+/* =========================================================
+   STARTSEITE
+   ========================================================= */
+function startseite(){
+  let h=`<h2>Was möchtest du tun? 🎯</h2>
+    <div class="modus-reihe">
+      <button class="modus-knopf" onclick="modusQuiz('alle')">
+        <span class="emo">❓</span><span class="txt"><b>Großes Quiz</b><span>Fragen aus allen Themen – sammle Sterne!</span></span></button>
+      <button class="modus-knopf" onclick="zeigeLuecken()">
+        <span class="emo">✏️</span><span class="txt"><b>Lückentext</b><span>Setze die richtigen Wörter ein</span></span></button>
+      <button class="modus-knopf" onclick="zeigeZuordnung()">
+        <span class="emo">🔗</span><span class="txt"><b>Zuordnen</b><span>Was gehört zusammen?</span></span></button>
+      <button class="modus-knopf" onclick="zeigeWappen()">
+        <span class="emo">🛡️</span><span class="txt"><b>Wappen-Werkstatt</b><span>Tippe auf die Teile des Wappens</span></span></button>
+    </div>
+    <h2 style="margin-top:22px">Lerne Thema für Thema 📚</h2>
+    <p style="margin:0 2px 4px;color:var(--grau);font-size:.9rem">Erst lesen 👉 dann Karteikarten 👉 dann Quiz</p>
+    <div class="gitter">`;
+  THEMEN.forEach(t=>{
+    h+=`<button class="kachel" onclick="themenseite('${t.id}')">
+        <span class="emo">${t.emo}</span>
+        <span class="titel">${t.titel}</span>
+        <span class="mini">${t.mini}</span>
+      </button>`;
+  });
+  h+=`</div>`;
+  ansicht.innerHTML=h;
+  window.scrollTo(0,0);
+}
+
+/* =========================================================
+   THEMENSEITE
+   ========================================================= */
+function themenseite(id){
+  const t=THEMEN.find(x=>x.id===id);
+  let h=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
+    <h2>${t.emo} ${t.titel}</h2>
+    ${WISSEN[id]}
+    <div class="modus-reihe">
+      <button class="modus-knopf" onclick="modusKarten('${id}')">
+        <span class="emo">🃏</span><span class="txt"><b>Karteikarten</b><span>Frage ansehen, umdrehen, prüfen</span></span></button>
+      <button class="modus-knopf" onclick="modusQuiz('${id}')">
+        <span class="emo">❓</span><span class="txt"><b>Quiz zu diesem Thema</b><span>Teste dein Wissen</span></span></button>
+    </div>`;
+  ansicht.innerHTML=h;
+  window.scrollTo(0,0);
+}
+
+/* =========================================================
+   KARTEIKARTEN
+   ========================================================= */
+let kartenListe=[], kartenIdx=0;
+function modusKarten(id){
+  kartenListe=mischen(KARTEN[id]);
+  kartenIdx=0;
+  zeigeKarte(id);
+}
+function zeigeKarte(id){
+  const k=kartenListe[kartenIdx];
+  const t=THEMEN.find(x=>x.id===id);
+  ansicht.innerHTML=`
+    <button class="zurueck" onclick="themenseite('${id}')">⬅️ Zurück</button>
+    <h2>🃏 Karteikarten – ${t.titel}</h2>
+    <div class="zaehler" style="text-align:center">Karte ${kartenIdx+1} von ${kartenListe.length}</div>
+    <div class="karte-flip" id="flip" onclick="this.classList.toggle('gedreht')">
+      <div class="karte-innen">
+        <div class="karte-seite karte-vorne">
+          <div class="label">Frage ❓</div>
+          <div class="frage">${k.f}</div>
+          <div class="tipp">👆 Tippe, um die Antwort zu sehen</div>
+        </div>
+        <div class="karte-seite karte-hinten">
+          <div class="label">Antwort ✅</div>
+          <div class="antwort">${k.a}</div>
+          ${k.t?`<div class="tipp">💡 ${k.t}</div>`:""}
+        </div>
+      </div>
+    </div>
+    <div class="karten-nav">
+      <button class="nav-knopf" onclick="event.stopPropagation();kartenZurueck('${id}')" ${kartenIdx===0?"disabled":""}>⬅️ Vorige</button>
+      <button class="nav-knopf" onclick="event.stopPropagation();kartenWeiter('${id}')">${kartenIdx===kartenListe.length-1?"Fertig 🏁":"Nächste ➡️"}</button>
+    </div>`;
+  window.scrollTo(0,0);
+}
+function kartenWeiter(id){
+  if(kartenIdx<kartenListe.length-1){kartenIdx++;zeigeKarte(id);}
+  else{sterneSpeichern(2);konfetti();
+    ansicht.innerHTML=`<div class="ergebnis"><div class="gross">🏆</div>
+      <div class="punkte">Alle Karten geschafft!</div>
+      <div class="lob">+2 Sterne für fleißiges Lernen ⭐</div>
+      <div class="knopf-reihe">
+        <button class="mini-knopf" onclick="modusKarten('${id}')">🔁 Nochmal</button>
+        <button class="mini-knopf" onclick="modusQuiz('${id}')">❓ Jetzt Quiz</button>
+        <button class="mini-knopf" onclick="themenseite('${id}')">📚 Thema</button>
+      </div></div>`;
+  }
+}
+function kartenZurueck(id){if(kartenIdx>0){kartenIdx--;zeigeKarte(id);}}
+
+/* =========================================================
+   QUIZ
+   ========================================================= */
+let quizListe=[], quizIdx=0, quizRichtig=0, quizThemaId="alle";
+function modusQuiz(id){
+  quizThemaId=id;
+  let pool = QUIZ.slice();
+  if(id!=="alle"){
+    const t=THEMEN.find(x=>x.id===id);
+    const map={geschichte:"Geschichte",wappen:"Wappen",staedte:"Die 5 Städte",berufe:"Berufe",wasser:"Wasser",haeuser:"Fachwerk & Feuer"};
+    pool=QUIZ.filter(q=>q.thema===map[id]);
+  }
+  quizListe=mischen(pool);
+  if(id==="alle") quizListe=quizListe.slice(0,15);
+  quizIdx=0;quizRichtig=0;
+  zeigeQuiz();
+}
+function zeigeQuiz(){
+  const q=quizListe[quizIdx];
+  // Antwortreihenfolge mischen, richtige Antwort merken
+  const opts=q.o.map((text,i)=>({text,korrekt:i===q.r}));
+  const gemischt=mischen(opts);
+  let h=`<button class="zurueck" onclick="${quizThemaId==='alle'?'startseite()':"themenseite('"+quizThemaId+"')"}">⬅️ Zurück</button>
+    <div class="quiz-frage">
+      <div class="nr">Frage ${quizIdx+1} von ${quizListe.length}　·　⭐ ${quizRichtig} richtig</div>
+      <div class="thema">${q.thema}</div>
+      <div class="text">${q.f}</div>
+      <div class="antworten">`;
+  gemischt.forEach((o,i)=>{
+    h+=`<button class="antwort-knopf" data-k="${o.korrekt}" onclick="antwortKlick(this)">${o.text}</button>`;
+  });
+  h+=`</div><div class="rueckmeldung" id="rueck"></div></div>`;
+  ansicht.innerHTML=h;
+  window.scrollTo(0,0);
+}
+function antwortKlick(btn){
+  const korrekt = btn.dataset.k==="true";
+  const alle=ansicht.querySelectorAll(".antwort-knopf");
+  alle.forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.k==="true") b.classList.add("richtig");
+  });
+  const rueck=$("#rueck");
+  if(korrekt){
+    btn.classList.add("richtig");
+    quizRichtig++;
+    rueck.className="rueckmeldung gut zeigen";
+    rueck.innerHTML=`✅ <b>Richtig!</b> Super gemacht.`;
+  }else{
+    btn.classList.add("falsch");
+    const richtigeAntwort=[...alle].find(b=>b.dataset.k==="true").textContent;
+    rueck.className="rueckmeldung schlecht zeigen";
+    rueck.innerHTML=`❌ Nicht ganz. Richtig ist: <b>${richtigeAntwort}</b>`;
+  }
+  const letzte = quizIdx===quizListe.length-1;
+  rueck.innerHTML+=`<button class="weiter-knopf" onclick="quizWeiter()">${letzte?"Ergebnis ansehen 🏁":"Weiter ➡️"}</button>`;
+}
+function quizWeiter(){
+  if(quizIdx<quizListe.length-1){quizIdx++;zeigeQuiz();}
+  else quizErgebnis();
+}
+function quizErgebnis(){
+  const gesamt=quizListe.length;
+  const verdient=quizRichtig;
+  sterneSpeichern(verdient);
+  let emo="💪",lob="Weiter üben – du schaffst das!";
+  const quote=quizRichtig/gesamt;
+  if(quote===1){emo="🏆";lob="Perfekt! Du bist ein Solingen-Profi!";konfetti();}
+  else if(quote>=0.7){emo="🌟";lob="Sehr gut gemacht!";konfetti();}
+  else if(quote>=0.5){emo="👍";lob="Gut! Schau dir die Themen nochmal an.";}
+  ansicht.innerHTML=`<div class="ergebnis">
+      <div class="gross">${emo}</div>
+      <div class="punkte">${quizRichtig} von ${gesamt} richtig</div>
+      <div class="lob">${lob}</div>
+      <div class="urkunde">+${verdient} Sterne ⭐ verdient</div>
+      <div class="knopf-reihe">
+        <button class="mini-knopf" onclick="modusQuiz('${quizThemaId}')">🔁 Nochmal</button>
+        <button class="mini-knopf" onclick="startseite()">🏠 Startseite</button>
+      </div>
+    </div>`;
+  window.scrollTo(0,0);
+}
+
+/* =========================================================
+   LÜCKENTEXT
+   ========================================================= */
+let lueckeIdx=0, lueckeAktuell=null, lueckeOffen=0;
+function zeigeLuecken(){
+  lueckeIdx=0;
+  startLuecke();
+}
+function startLuecke(){
+  lueckeAktuell=JSON.parse(JSON.stringify(LUECKEN[lueckeIdx]));
+  // Lücken sind die Großbuchstaben-Teile an ungeraden Positionen
+  const satzteile=lueckeAktuell.teile;
+  let satzHtml="", lueckenNr=0;
+  satzteile.forEach((teil,i)=>{
+    if(i%2===1){ // Lücke
+      satzHtml+=`<span class="luecke" id="luecke-${lueckenNr}" data-loesung="${teil}"></span>`;
+      lueckenNr++;
+    }else{
+      satzHtml+=teil;
+    }
+  });
+  lueckeOffen=lueckenNr;
+  const woerter=mischen(lueckeAktuell.woerter);
+  let chips="";
+  woerter.forEach(w=>{chips+=`<button class="wort-chip" data-wort="${w}" onclick="wortGesetzt(this)">${w}</button>`;});
+  ansicht.innerHTML=`
+    <button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
+    <h2>✏️ Lückentext</h2>
+    <div class="zaehler" style="text-align:center">Satz ${lueckeIdx+1} von ${LUECKEN.length}</div>
+    <div class="quiz-frage">
+      <div class="luecke-satz">${satzHtml}</div>
+    </div>
+    <p style="text-align:center;color:var(--grau);font-size:.9rem">Tippe auf das passende Wort 👇</p>
+    <div class="wort-wolke">${chips}</div>
+    <div class="rueckmeldung" id="rueckL"></div>`;
+  window.scrollTo(0,0);
+}
+function wortGesetzt(btn){
+  const wort=btn.dataset.wort;
+  // nächste leere Lücke finden, deren Lösung passt – sonst erste leere
+  const luecken=[...ansicht.querySelectorAll(".luecke")];
+  let ziel=luecken.find(l=>!l.classList.contains("gefuellt") && l.dataset.loesung===wort);
+  if(!ziel) ziel=luecken.find(l=>!l.classList.contains("gefuellt"));
+  if(!ziel) return;
+  const richtig = ziel.dataset.loesung===wort;
+  ziel.textContent=wort;
+  ziel.classList.add("gefuellt");
+  if(!richtig){ ziel.style.borderBottomColor="var(--rot)"; ziel.style.color="var(--rot)"; }
+  btn.classList.add("benutzt"); btn.disabled=true;
+  lueckeOffen--;
+  if(lueckeOffen<=0) lueckeAuswerten();
+}
+function lueckeAuswerten(){
+  const luecken=[...ansicht.querySelectorAll(".luecke")];
+  const allesRichtig=luecken.every(l=>l.dataset.loesung===l.textContent);
+  const rueck=$("#rueckL");
+  const letzte=lueckeIdx===LUECKEN.length-1;
+  if(allesRichtig){
+    sterneSpeichern(1);
+    rueck.className="rueckmeldung gut zeigen";
+    rueck.innerHTML=`✅ <b>Alles richtig!</b> +1 Stern ⭐`;
+  }else{
+    rueck.className="rueckmeldung schlecht zeigen";
+    const loesung=luecken.map(l=>l.dataset.loesung).join(" … ");
+    rueck.innerHTML=`Fast! Die Lösung war: <b>${loesung}</b>`;
+  }
+  rueck.innerHTML+=`<button class="weiter-knopf" onclick="lueckeWeiter()">${letzte?"Fertig 🏁":"Nächster Satz ➡️"}</button>`;
+}
+function lueckeWeiter(){
+  if(lueckeIdx<LUECKEN.length-1){lueckeIdx++;startLuecke();}
+  else{ konfetti();
+    ansicht.innerHTML=`<div class="ergebnis"><div class="gross">🏆</div>
+      <div class="punkte">Lückentext geschafft!</div>
+      <div class="lob">Toll gemacht! ⭐</div>
+      <div class="knopf-reihe">
+        <button class="mini-knopf" onclick="zeigeLuecken()">🔁 Nochmal</button>
+        <button class="mini-knopf" onclick="startseite()">🏠 Startseite</button>
+      </div></div>`;
+  }
+}
+
+/* =========================================================
+   ZUORDNUNG
+   ========================================================= */
+let zoIdx=0;
+function zeigeZuordnung(){ zoIdx=0; startZuordnung(); }
+function startZuordnung(){
+  const z=ZUORDNUNGEN[zoIdx];
+  let h=`<button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
+    <h2>🔗 Zuordnen</h2>
+    <div class="zaehler" style="text-align:center">Aufgabe ${zoIdx+1} von ${ZUORDNUNGEN.length}</div>
+    <h2 style="font-size:1.05rem;text-align:center;color:var(--blau)">${z.titel}</h2>
+    <div class="zuordnung-spalten">`;
+  z.paare.forEach((p,pi)=>{
+    h+=`<div class="zo-paar"><div class="zo-begriff">${p.begriff}</div><div class="zo-optionen">`;
+    mischen(p.optionen).forEach(opt=>{
+      h+=`<button class="zo-opt" data-paar="${pi}" data-richtig="${opt===p.richtig}" onclick="zoKlick(this)">${opt}</button>`;
+    });
+    h+=`</div></div>`;
+  });
+  h+=`</div><div class="rueckmeldung" id="rueckZ"></div>`;
+  ansicht.innerHTML=h;
+  window.scrollTo(0,0);
+}
+let zoGeloest=0;
+function zoKlick(btn){
+  const paar=btn.dataset.paar;
+  const geschwister=ansicht.querySelectorAll(`.zo-opt[data-paar="${paar}"]`);
+  if([...geschwister].some(b=>b.disabled)) return; // Paar schon gelöst
+  const richtig=btn.dataset.richtig==="true";
+  if(richtig){
+    btn.classList.add("richtig");
+    geschwister.forEach(b=>b.disabled=true);
+    zoGeloest++;
+    if(zoGeloest>=ZUORDNUNGEN[zoIdx].paare.length) zoFertig();
+  }else{
+    btn.classList.add("falsch");btn.disabled=true;
+  }
+}
+function zoFertig(){
+  sterneSpeichern(2);
+  const rueck=$("#rueckZ");
+  const letzte=zoIdx===ZUORDNUNGEN.length-1;
+  rueck.className="rueckmeldung gut zeigen";
+  rueck.innerHTML=`✅ <b>Alles zugeordnet!</b> +2 Sterne ⭐
+    <button class="weiter-knopf" onclick="zoWeiter()">${letzte?"Fertig 🏁":"Nächste Aufgabe ➡️"}</button>`;
+}
+function zoWeiter(){
+  zoGeloest=0;
+  if(zoIdx<ZUORDNUNGEN.length-1){zoIdx++;startZuordnung();}
+  else{ konfetti();
+    ansicht.innerHTML=`<div class="ergebnis"><div class="gross">🏆</div>
+      <div class="punkte">Alles richtig zugeordnet!</div>
+      <div class="lob">Klasse! ⭐</div>
+      <div class="knopf-reihe">
+        <button class="mini-knopf" onclick="zeigeZuordnung()">🔁 Nochmal</button>
+        <button class="mini-knopf" onclick="startseite()">🏠 Startseite</button>
+      </div></div>`;
+  }
+}
+
+/* =========================================================
+   WAPPEN-WERKSTATT (interaktives SVG)
+   ========================================================= */
+const WAPPEN_INFO={
+  krone:{t:"👑 Die Mauerkrone (5 Türme)",x:"Sie zeigt, dass Solingen eine <b>Großstadt</b> mit über <b>100.000 Einwohnern</b> ist. Viele glauben auch: die 5 Türme = die 5 Städte."},
+  anker:{t:"⚓ Der Anker",x:"Er erinnert an den Schutzheiligen <b>Sankt Clemens</b>. Der Legende nach wurde er an einen Anker gekettet und ins <b>Meer</b> geworfen."},
+  schwerter:{t:"⚔️ Die zwei Schwerter",x:"Sie sind das <b>Wahrzeichen der Solinger Industrie</b> – dem Schmieden von Klingen. Darum: <b>Klingenstadt</b>!"},
+  grund:{t:"🔵 Der blaue Grund",x:"Das Wappen hat einen <b>blauen</b> Hintergrund. Anker und Schwerter sind <b>golden</b> bzw. silbern."},
+};
+function zeigeWappen(){
+  ansicht.innerHTML=`
+    <button class="zurueck" onclick="startseite()">⬅️ Zurück</button>
+    <h2>🛡️ Wappen-Werkstatt</h2>
+    <p style="text-align:center;color:var(--grau);font-size:.92rem">Tippe auf einen Teil des Wappens und erfahre, was er bedeutet!</p>
+    <svg class="wappen-svg" viewBox="0 0 200 250" xmlns="http://www.w3.org/2000/svg">
+      <!-- Mauerkrone -->
+      <g class="wappen-teil" onclick="wappenKlick('krone')">
+        <rect x="40" y="8" width="120" height="22" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+        <rect x="44" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+        <rect x="66" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+        <rect x="88" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+        <rect x="110" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+        <rect x="132" y="0" width="13" height="12" fill="#f5b212" stroke="#15407a" stroke-width="2"/>
+      </g>
+      <!-- Schild / blauer Grund -->
+      <path class="wappen-teil" onclick="wappenKlick('grund')"
+        d="M40 36 H160 V150 Q160 210 100 238 Q40 210 40 150 Z"
+        fill="#1f63b8" stroke="#15407a" stroke-width="3"/>
+      <!-- Anker -->
+      <g class="wappen-teil" onclick="wappenKlick('anker')" stroke="#f5b212" stroke-width="6" fill="none" stroke-linecap="round">
+        <circle cx="100" cy="62" r="8" fill="#f5b212" stroke="none"/>
+        <line x1="100" y1="70" x2="100" y2="180"/>
+        <line x1="78" y1="92" x2="122" y2="92"/>
+        <path d="M62 150 Q62 185 100 185 Q138 185 138 150"/>
+        <path d="M62 150 l-8 -14 M62 150 l14 -6"/>
+        <path d="M138 150 l8 -14 M138 150 l-14 -6"/>
+      </g>
+      <!-- zwei gekreuzte Schwerter -->
+      <g class="wappen-teil" onclick="wappenKlick('schwerter')" stroke="#e9eef5" stroke-width="6" stroke-linecap="round">
+        <line x1="58" y1="78" x2="150" y2="170"/>
+        <line x1="142" y1="78" x2="50" y2="170"/>
+        <line x1="48" y1="86" x2="70" y2="86" stroke="#f5b212"/>
+        <line x1="130" y1="86" x2="152" y2="86" stroke="#f5b212"/>
+      </g>
+    </svg>
+    <div class="tipp-zeile">👆 Tippe auf Krone, Anker, Schwerter oder den blauen Grund</div>
+    <div class="wappen-info" id="wappenInfo">
+      <b>Willkommen in der Wappen-Werkstatt!</b>
+      Das Solinger Wappen erzählt viel über die Stadt. Tippe einen Teil an. 🔎
+    </div>
+    <div class="knopf-reihe">
+      <button class="mini-knopf" onclick="wappenKlick('krone')">👑 Krone</button>
+      <button class="mini-knopf" onclick="wappenKlick('anker')">⚓ Anker</button>
+      <button class="mini-knopf" onclick="wappenKlick('schwerter')">⚔️ Schwerter</button>
+      <button class="mini-knopf" onclick="wappenKlick('grund')">🔵 Grund</button>
+    </div>`;
+  window.scrollTo(0,0);
+}
+let wappenGesehen=new Set();
+function wappenKlick(teil){
+  const info=WAPPEN_INFO[teil];
+  $("#wappenInfo").innerHTML=`<b>${info.t}</b>${info.x}`;
+  if(!wappenGesehen.has(teil)){
+    wappenGesehen.add(teil);
+    if(wappenGesehen.size===4){sterneSpeichern(3);konfetti();
+      setTimeout(()=>{const el=$("#wappenInfo");if(el)el.innerHTML+=`<div class="merk" style="margin-top:8px">🏆 Du hast alle 4 Teile entdeckt! +3 Sterne ⭐</div>`;},200);
+    }
+  }
+}
+
+/* Start */
+startseite();
+</script>
+</body>
+</html>
