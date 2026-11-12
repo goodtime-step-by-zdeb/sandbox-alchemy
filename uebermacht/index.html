@@ -3526,6 +3526,28 @@ window.addEventListener('resize',resize);resize();applyWorld({a:0,b:-1,seed:0});
 // gM/wg2: ab Welt gM wächst die Härte nur noch um wg2 je Welt (lange Strecke bis Welt 25 ohne Mauer); cw: ab Welt 10 bringt jede Welt cw-mal so viele Münzen wie die davor
 // hb: Anteil des SCHWER-Bossaufschlags in Welt 1–2 (steigt bis Welt 5 auf voll) – der erste schwere Lauf soll Welt 3 sehen
 // gL: bis zu dieser Welt wächst die Härte sanft, danach je Welt um den Faktor wg (Horden) bzw. wg^bgE (Boss); upE: Anteil des Dauerausbaus, der NICHT gegengerechnet wird
+// ---------- Gewinnquote je Modus: Anteil der Läufe mit neuem Rekord – LEICHT 99 %, MITTEL 50 %, SCHWER 30 %.
+// Zwei Regler je Modus, die sich dem Spieler anpassen: r = schon geschaffte Welten (bis zum Rekord sicher hinkommen), n = die neue Welt hinter dem Rekord.
+var DDA_T=[0.99,0.5,0.3],DDA_R=[0.997,0.9,0.85],DDA_0={r:[0.25,0.5,0.8],n:[0.25,0.5,0.9]},DDA_K=0.6,DDA_KR=0.8;
+function ddaA(){var a=save.dda2,i;if(!a||typeof a!=='object'||!Array.isArray(a.r)||!Array.isArray(a.n)||a.r.length!==3||a.n.length!==3)a=save.dda2={r:DDA_0.r.slice(),n:DDA_0.n.slice()};
+  for(i=0;i<3;i++){if(!(a.r[i]>=1e-6&&a.r[i]<=50))a.r[i]=DDA_0.r[i];if(!(a.n[i]>=1e-6&&a.n[i]<=50))a.n[i]=DDA_0.n[i];}return a;}
+function ddaF(){if(!G)return 1;var a=ddaA(),m=G.mode>=0?G.mode:save.mode;return G.level<=(G.best0||0)?a.r[m]:a.n[m];}
+function ddaAdj(k,m,ok,t,kk,lo){var a=ddaA();a[k][m]=clamp(a[k][m]*Math.exp(ok?kk*(1-t):-kk*t),1e-5,30);}
+// LEICHT: knapp soll es sich anfühlen, verloren wird trotzdem fast nie. Je Welt: ohne Rettung geschafft -> etwas härter, mit Rettung -> leichter
+function ddaEasy(ok){var b=G.best0||0,k=G.level<=b?'r':'n';ddaAdj(k,0,ok,0.8,0.3,0);var a=ddaA();a[k][0]=Math.min(a[k][0],0.6);}
+function mercyOk(){if(!G||G.mode!==0)return false;return G.ddaWon?(G.rescAfter||0)<1:true;}
+function mercyDo(){G.resc=(G.resc||0)+1;if(G.ddaWon)G.rescAfter=(G.rescAfter||0)+1;G.rescL=G.level;
+  G.N=Math.max(G.N,8,Math.ceil((G.peak||10)*0.35));G.inv=1.6;G.ts=0.25;G.clutchT=6;G.charge=1;G.heat*=0.75;
+  say('GERADE NOCH GERETTET!','#ffd23f');try{SND.clutch();}catch(e){}ring(WX(G.x),0,10,'#ffd23f',0.8);G.shake=0.6;}
+// Sieg in Welt G.level
+function ddaWin(){if(!G)return;var m=G.mode,b=G.best0||0,L=G.level;
+  if(m===0){ddaEasy(G.rescL!==L);if(L>b)G.ddaWon=true;persist();return;}
+  if(L===b&&!G.ddaReach){G.ddaReach=true;ddaAdj('r',m,true,DDA_R[m],DDA_KR,0.01);}
+  if(L===b+1&&!G.ddaWon){G.ddaWon=true;if(!G.ddaReach&&b>0){G.ddaReach=true;ddaAdj('r',m,true,DDA_R[m],DDA_KR,0.01);}ddaAdj('n',m,true,Math.min(0.995,DDA_T[m]/DDA_R[m]),DDA_K,0.02);}
+  persist();}
+// Lauf verloren
+function ddaLose(){if(!G)return;var m=G.mode,b=G.best0||0,L=G.level;if(m===0){ddaEasy(false);persist();return;}if(G.ddaWon)return;
+  if(L<=b)ddaAdj('r',m,false,DDA_R[m],DDA_KR,0.01);else ddaAdj('n',m,false,Math.min(0.995,DDA_T[m]/DDA_R[m]),DDA_K,0.02);persist();}
 var TUNE={bst:1.4,gBad:0.7,idT:2.6,idL:0.12,stL:0.22,bwk:1.4,bh:0.3,up:1.04,down:0.8,ratchet:0.6,tf0:0.9,tf1:0.75,tfMax:1.6,boss0:0.8,boss1:0.09,bossMax:1.7,leak:40,gL:5,gB:4,wg:1.35,bgE:1,upE:1,be:2.6,gM:10,wg2:1.15,cw:1.06,hb:0.15,qSt0:150,qSt1:25,qTr:36,qGa:5},RL0={};
 function hardExp(L,from){L=Math.min(L,400);return L<=from?1:Math.pow(TUNE.wg,Math.min(L,TUNE.gM)-from)*Math.pow(TUNE.wg2,Math.max(0,L-TUNE.gM));}
 function worldHard(L){return hardExp(L,TUNE.gL);}
@@ -3629,7 +3651,7 @@ function spawnHorde(big,mul){
   var L=G.level,tf=(L<=1?0.41:TUNE.tf0+TUNE.tf1*(Math.min(L,TUNE.gL)-2))*worldHard(L),nref=G.N,rl=G.rule;
   if(G.lossAcc<0.03)G.heat*=TUNE.up;else if(G.lossAcc>0.2)G.heat*=TUNE.down;else if(G.lossAcc>0.1)G.heat*=0.96;G.heat=clamp(G.heat,0.6,G.md.heatMax);G.lossAcc=0;
   if(modIs('mass'))mul=(mul||1)*1.25;
-  var B=refPower()*3*tf*G.heat*(big?1.4:1)*(mul||1)*G.md.tf;
+  var B=refPower()*3*tf*G.heat*(big?1.4:1)*(mul||1)*G.md.tf*ddaF();
   var pool=['swarm','swarm','brutes'];
   if(L>=2)pool.push('fast','wall');if(L>=3)pool.push('spreng','spreng');if(L>=4)pool.push('mother');if(L>=5)pool.push('mix','mix');if(L>=6)pool.push('shield','shield');if(L>=8)pool.push('jump','jump');
   if(rl.jump)pool.push('jump','jump','jump','jump');if(rl.spreng)pool.push('spreng','spreng','spreng','spreng');if(rl.brute)pool.push('brutes','brutes','brutes','brutes');
@@ -3736,7 +3758,7 @@ function spawnRecruits(){var n=6+Math.min(6,G.level),ph=Math.random()*6.28,rs=(M
 function spawnBoss(){
   // Boss-Leben hängt an der jetzigen Schlagkraft, höchstens noch zur Hälfte an der früheren Spitze (ein verpatztes Tor ist kein Todesurteil mehr)
   var L=G.level,bt=Math.min(12,8+L*0.7),pn=power()/G.upF,rp=Math.max(pn,G.maxP*0.5,7*Math.pow(1.5,Math.min(L,900)-1)/G.scl);if(pn>G.maxP)G.maxP=pn;
-  var hp=rp*bt*(L<=1?0.89:TUNE.boss0+0.2*Math.min(L,TUNE.gL))*Math.pow(hardExp(L,TUNE.gB),TUNE.bgE)*(1+(TUNE.be-1)*clamp((L-1)/3,0,1))*Math.pow(G.heat,TUNE.bh)*(G.md.boss>1?1+(G.md.boss-1)*clamp((L-2)/3,TUNE.hb,1):G.md.boss)*(L===1?0.7:1)*(G.giant?1.25:1)*(G.bet===2?1.7:G.bet===1?1.3:1)*0.7*TUNE.bst;
+  var hp=rp*bt*(L<=1?0.89:TUNE.boss0+0.2*Math.min(L,TUNE.gL))*Math.pow(hardExp(L,TUNE.gB),TUNE.bgE)*(1+(TUNE.be-1)*clamp((L-1)/3,0,1))*Math.pow(G.heat,TUNE.bh)*(G.md.boss>1?1+(G.md.boss-1)*clamp((L-2)/3,TUNE.hb,1):G.md.boss)*(L===1?0.7:1)*(G.giant?1.25:1)*(G.bet===2?1.7:G.bet===1?1.3:1)*0.7*TUNE.bst*ddaF();
   if(G.bet===2)G.bossLim=2;G.bossHits=0;G.bossHitsMax=G.bossLim;
   var e=addEnemy('B',0,ZMAX,hp,G.N);if(!e){G.en.length=100;e=addEnemy('B',0,ZMAX,hp,G.N);}
   e.sp=(ZMAX-2)/(bt*(G.giant?2.0:1.6));e.bt=bt;e.stT=2.6;e.weak=0;G.stN=0;e.enr=false;e.big=G.giant;G.boss=e;G.running=false;
@@ -3757,6 +3779,7 @@ function loseUnits(n,soft){
     G.clutchLeft--;G.clutchUsed=true;G.peak=Math.max(1,G.N-n)*2;G.N=Math.max(1,G.N-n);G.clutchT=6;G.ts=0.25;G.heat*=0.8;G.charge=Math.min(1,G.charge+0.5);
     say('LETZTES AUFGEBOT!','#ff9f1c');SND.clutch();ring(WX(G.x),0,9,'#ff9f1c',0.7);return;
   }
+  if(G.N-n<=0&&mercyOk()){mercyDo();return;}
   G.N-=n;if(G.N<=0){G.N=0;gameOver();}
 }
 function ftext(x,z,t,col,sc){if(G.tx.length>=16)G.tx.shift();G.tx.push({x:x,z:z,t:0,text:t,col:col,sc:sc||1,dx:rnd(-.6,.6)});}
@@ -3802,7 +3825,7 @@ function bossDown(e){
   for(var i=0;i<6;i++)(function(i){setTimeout(function(){if(!G)return;blast(WX(e.x)+rnd(-2,2),WZ(e.z)+rnd(-2,2),rnd(1,1.7),['#ffd166','#ff6b3a','#fff3c4'][i%3]);SND.boom(0.7);G.shake=0.5;},i*130);})(i);
   G.shake=0.7;G.flash=0.5;G.ts=0.15;SND.boom(1);
   G.en.forEach(function(o){if(!o.dead){o.dead=true;corpse(o);}});G.hz=[];
-  G.won=true;
+  G.won=true;ddaWin();
   var bc0=20*G.level*G.md.coin*(modIs('gold')?2:1)*(e.big?3:1)*G.wCoin*G.cbCoin;G.coins+=bc0;G.coinFx+=bc0;G.boss=null;
   // Album, Wochen-Leiter, Tages-Herausforderung
   cardAdd('e_B',1);if(e.big)cardAdd('e_G',1);cardAdd('w_'+G.world.a,1);if(G.world.b>=0)cardAdd('w_'+G.world.b,1);weekAdd(G.mode+1);
@@ -3884,7 +3907,7 @@ function perkStage(){
   px.appendChild(br);
 }
 function gameOver(){
-  if(G.over)return;G.over=true;state='over';M.on=false;SND.boom(1);setTimeout(function(){SND.lose();},400);
+  if(G.over)return;ddaLose();G.over=true;state='over';M.on=false;SND.boom(1);setTimeout(function(){SND.lose();},400);
   G.banner=null;G.bossLeft=G.boss?clamp(G.boss.hp/G.boss.mhp,0,1):-1;flushKills();bankRun();
   blast(WX(G.x),0,1.6,'#ff5a3a');G.shake=0.8;flushKills();$('abil').classList.add('hide');$('pauseBtn').classList.add('hide');$('hint').classList.add('hide');$('goalbar').classList.add('hide');
   setTimeout(showOver,1300);
@@ -4203,6 +4226,7 @@ function update(dt){
     if(e.z<=0.7){
       if(e.t==='B'){var lim=G.bossLim||3,n0=G.N,hh=e.hits||0;
         // letzter Schlag: kein Schild und kein Aufgebot rettet mehr – der Kampf endet sicher (früher konnte er hier hängen bleiben)
+        if((G.N<=2||hh>=lim-1)&&mercyOk()){mercyDo();e.z=17;e.hits=Math.max(0,lim-2);G.bossHits=e.hits;e.hp=Math.min(e.hp,e.mhp*0.6);continue;}
         if(G.N<=2||hh>=lim-1){G.inv=0;G.clutchLeft=0;say('DER BOSS ÜBERRENNT DIE TRUPPE!','#ff5a5a');blast(WX(G.x),0,1.8,'#ff4040');loseUnits(G.N+1);if(G.over)return;}
         e.z=17;blast(WX(G.x),0,1.6,'#ff4040');SND.boom(1);G.shake=0.8;loseUnits(Math.ceil(G.N*(hh===0?0.4:0.5)*Math.sqrt(G.md.loss)));if(G.over)return;
         if(G.N<n0){e.hits=hh+1;G.bossHits=e.hits;snd('bossHit');if(e.hits>=lim-1)snd('lowHp');G.clutchT=Math.max(G.clutchT,e.hits>=lim-1?7:5);G.charge=e.hits>=lim-1?1:Math.min(1,G.charge+0.5);
@@ -4668,7 +4692,7 @@ function frame(ts){
 document.addEventListener('visibilitychange',function(){last=performance.now();dragX=null;ftHold=0.6;ftN=0;ftAcc=0;ftSlow=0;});
 renderShop();
 requestAnimationFrame(frame);
-window.__g={TUNE:TUNE,step:function(n){for(var i=0;i<n&&state==='play'&&!G.over;i++){time+=1/60;update(1/60);}},setLevel:function(l){G.level=l;G.bu=[];G.ga=[];G.cr=[];G.en=[];G.hz=[];G.rc=[];startLevel();},
+window.__g={TUNE:TUNE,dda:function(){return ddaA();},step:function(n){for(var i=0;i<n&&state==='play'&&!G.over;i++){time+=1/60;update(1/60);}},setLevel:function(l){G.level=l;G.bu=[];G.ga=[];G.cr=[];G.en=[];G.hz=[];G.rc=[];startLevel();},
   get G(){return G;},get state(){return state;},get QL(){return QL;},air:function(){useAbility('air');},use:useAbility,gateGood:gateGood,save:save,spawnBoss:spawnBoss,spawnHorde:spawnHorde,spawnSaws:spawnSaws,spawnBarrels:spawnBarrels,spawnRecruits:spawnRecruits,spawnCrate:spawnCrate,spawnGate:spawnGate,
   applyWorld:applyWorld,applyCust:applyCust,cust:function(o){save.cust=o;applyCust();},info:function(){return {calls:renderer.info.render.calls,tris:renderer.info.render.triangles,geo:renderer.info.memory.geometries,tex:renderer.info.memory.textures,progs:renderer.info.programs.length};},setState:function(s){state=s;},get scene(){return scene;},look:function(){return {n:curLook.n,tod:curLook.tod||'',weather:curLook.weather||''};},setQL:function(q){QL=q;ftUp=1;resize();},qlHint:gQLhint,cam:CAMT,dbg:function(){return [camFb,pvA,winA,camR,camera.position.x,camera.position.y,camera.position.z,camera.fov].map(function(v){return Math.round(v*100)/100;});},fx:{gate:gateBurst,crate:crateBurst,confetti:confetti,stop:stopFx,coin:coinFlyW}};
 for(var lk in LHOOK)window.__g[lk]=LHOOK[lk];
