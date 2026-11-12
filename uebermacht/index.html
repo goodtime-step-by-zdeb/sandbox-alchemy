@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="theme-color" content="#0b1030">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="icon" href="icon-192.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Übermacht</title>
 <style>
@@ -266,6 +267,9 @@
   #whT{font-size:20px;min-height:28px;text-align:center}
   #fsBtn{position:fixed;right:8px;top:160px;z-index:6;width:40px;height:40px;border-radius:13px;border:0;background:linear-gradient(180deg,#27327a,#1a2150);box-shadow:inset 0 0 0 2px #4a5cc8,0 3px 0 #0c1130;padding:0;cursor:pointer;display:none;align-items:center;justify-content:center}
   body[data-st=play] #fsBtn{display:flex}
+  body.app #fsBtn{display:none!important}
+  #fsApp{position:absolute;left:10px;top:100px;pointer-events:auto;border:0;cursor:pointer;width:66px;padding:7px 0 5px;border-radius:16px;background:linear-gradient(180deg,#ffb36b,#f0661e);box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 4px 0 #8a3a00,0 8px 14px rgba(0,0,0,.4);color:#fff;font-family:var(--fh);font-weight:var(--hw);font-size:11px;line-height:1.15;text-shadow:0 1px 0 #8a3a00}
+  #fsApp:active{transform:translateY(2px)}
   #fsMenu{position:absolute;left:10px;top:16px;pointer-events:auto;border:0;cursor:pointer;width:66px;padding:7px 0 5px;border-radius:16px;background:linear-gradient(180deg,#7fb2ff,#2f6fe0);box-shadow:inset 0 2px 0 rgba(255,255,255,.6),0 4px 0 #1a3f8a,0 8px 14px rgba(0,0,0,.4);color:#fff;font-family:var(--fh);font-weight:var(--hw);font-size:11px;line-height:1.15;text-shadow:0 1px 0 #1a3f8a}
   #fsMenu:active,#fsBtn:active{transform:translateY(2px)}
 </style>
@@ -1645,6 +1649,7 @@ var ICO={
   plasma:[['M12 5a7 7 0 1 0 0 14a7 7 0 1 0 0-14z','#fff'],['M3 16.5C1 13 6 8 12.5 6.5S24 6 21 9.5','s']],
   air:['M12 1.5c3.4 3 4.6 7.2 4.4 11.5l2.6 3.2-3.6.6L14.2 21H9.8l-1.2-4.2-3.6-.6L7.6 13C7.4 8.7 8.6 4.5 12 1.5z',['M12 7a2.2 2.2 0 1 0 0 4.4A2.2 2.2 0 1 0 12 7z','#ff7a1a']],
   frz:[['M12 2.5v19M3.8 7.2l16.4 9.6M20.2 7.2L3.8 16.8','s'],['M9 3.5l3 3 3-3M9 20.5l3-3 3 3','s']],
+  inst:[['M12 3v11M7 9.5l5 5 5-5M4 15.5v5h16v-5','s']],
   full:[['M3.5 9V3.5H9M15 3.5h5.5V9M20.5 15v5.5H15M9 20.5H3.5V15','s']],
   shrink:[['M9 3.5V9H3.5M20.5 9H15V3.5M15 20.5V15h5.5M3.5 15H9v5.5','s']],
   bolt:['M13.5 1.5L4.5 13.2h5.8L8.5 22.5l11-12.7h-6.2z'],
@@ -1971,7 +1976,8 @@ function renderMenu(){
     var x=btn(TAB===t[0]?'sel':'',I(t[1],26)+t[2]+(nu?'<i class="dot neu">NEU</i>':t[0]==='mis'&&cl?'<i class="dot">'+cl+'</i>':t[0]==='alb'&&save.albNew?'<i class="dot">'+Math.min(99,save.albNew)+'</i>':rdy[t[0]]?'<i class="dot">!</i>':''),function(){TAB=t[0];snd('select');renderMenu();});x.setAttribute('data-tab',t[0]);tb.appendChild(x);});
   var he=$('hero');he.innerHTML='';
   var mo=uiMotto(),nm=el('div','','<b><small>'+rankName(rk)+'</small>'+(save.cust.name?esc(save.cust.name):'DEINE TRUPPE')+'</b>'+(mo&&(TAB==='play'||TAB==='trp')?'<i class="mo">'+mo+'</i>':'')+(TAB==='play'&&save.bestM[save.mode]>0?'<i>Rekord '+MODES[save.mode].n+': Welt '+(save.bestM[save.mode]+1)+' erreicht</i>':''));nm.id='hname';he.appendChild(nm);
-  if(TAB==='play'){var fb=btn('',I(fsOn()?'shrink':'full',30)+'<br>'+(fsOn()?'FENSTER':'VOLLBILD'),fsToggle);fb.id='fsMenu';fb.setAttribute('aria-label','Vollbild');he.appendChild(fb);}
+  if(TAB==='play'&&instEv&&!isApp()){var ab=btn('',I('inst',30)+'<br>ALS APP',appInstall);ab.id='fsApp';ab.setAttribute('aria-label','Als App installieren');he.appendChild(ab);}
+  if(TAB==='play'&&!isApp()){var fb=btn('',I(fsOn()?'shrink':'full',30)+'<br>'+(fsOn()?'FENSTER':'VOLLBILD'),fsToggle);fb.id='fsMenu';fb.setAttribute('aria-label','Vollbild');he.appendChild(fb);}
   if(TAB==='play'&&dailyOpen()){var gb=btn('',I('gift',34)+'<br>TAG '+dailyNext()+'<i class="dot">!</i>',dailyClaim);gb.id='gift';gb.setAttribute('aria-label','Tagesbelohnung abholen');he.appendChild(gb);}
   var h=$('tabc');h.innerHTML='';h.scrollTop=0;
   if(TAB==='play')tabPlay(h);else if(TAB==='wpn')tabWpn(h);else if(TAB==='abl')tabAbl(h);else if(TAB==='trp')tabTrp(h);else if(TAB==='alb')tabAlb(h);else tabMis(h);
@@ -3962,6 +3968,13 @@ function saveQuit(){
   $('pause').classList.add('hide');$('abil').classList.add('hide');$('pauseBtn').classList.add('hide');$('hint').classList.add('hide');$('goalbar').classList.add('hide');TAB='play';G=null;renderMenu();$('menu').classList.remove('hide');toast(I('disk',18)+'Gespeichert');
 }
 $('pauseBtn').innerHTML=I('pause',22);$('saveBtn').innerHTML=I('disk',18)+'Speichern &amp; zum Menü';
+var instEv=null;
+function isApp(){try{return matchMedia('(display-mode: fullscreen)').matches||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}catch(e){return false;}}
+function appInstall(){if(!instEv)return;var ev=instEv;instEv=null;try{ev.prompt();ev.userChoice.then(function(){if(state==='menu')renderMenu();},function(){});}catch(e){}if(state==='menu')renderMenu();}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();instEv=e;if(state==='menu')renderMenu();});
+window.addEventListener('appinstalled',function(){instEv=null;toast('Installiert – starte Übermacht jetzt über das neue Symbol');if(state==='menu')renderMenu();});
+if(isApp())document.body.classList.add('app');
+if('serviceWorker' in navigator&&/github\.io$/.test(location.hostname)){try{navigator.serviceWorker.register('sw.js').catch(function(){});}catch(e){}}
 function fsOn(){return !!(document.fullscreenElement||document.webkitFullscreenElement);}
 function fsIcon(){var b=$('fsBtn');if(b)b.innerHTML=I(fsOn()?'shrink':'full',22);}
 function fsToggle(){
