@@ -3969,12 +3969,14 @@ function saveQuit(){
 }
 $('pauseBtn').innerHTML=I('pause',22);$('saveBtn').innerHTML=I('disk',18)+'Speichern &amp; zum Menü';
 var instEv=null;
-function isApp(){try{if(document.fullscreenElement||document.webkitFullscreenElement)return false;return matchMedia('(display-mode: fullscreen)').matches||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}catch(e){return false;}}
+function isApp(){try{if(/UebermachtApp/.test(navigator.userAgent))return true;if(document.fullscreenElement||document.webkitFullscreenElement)return false;return matchMedia('(display-mode: fullscreen)').matches||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}catch(e){return false;}}
 function appInstall(){if(!instEv)return;var ev=instEv;instEv=null;try{ev.prompt();ev.userChoice.then(function(){if(state==='menu')renderMenu();},function(){});}catch(e){}if(state==='menu')renderMenu();}
 window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();instEv=e;if(state==='menu')renderMenu();});
 window.addEventListener('appinstalled',function(){instEv=null;toast('Installiert – starte Übermacht jetzt über das neue Symbol');if(state==='menu')renderMenu();});
 if(isApp()&&!fsOn())document.body.classList.add('app');
 if('serviceWorker' in navigator&&/github\.io$/.test(location.hostname)){try{navigator.serviceWorker.register('sw.js').catch(function(){});}catch(e){}}
+window.__appPause=function(){try{if(state==='play')pauseGame();if(typeof AC!=='undefined'&&AC&&AC.suspend)AC.suspend();}catch(e){}};
+window.__appResume=function(){try{if(typeof AC!=='undefined'&&AC&&AC.resume)AC.resume();}catch(e){}};
 function fsOn(){return !!(document.fullscreenElement||document.webkitFullscreenElement);}
 function fsIcon(){var b=$('fsBtn');if(b)b.innerHTML=I(fsOn()?'shrink':'full',22);}
 function fsToggle(){
